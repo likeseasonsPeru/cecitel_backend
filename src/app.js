@@ -4,9 +4,10 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const { port } = require("./config");
-const app = express();
+const {PUBLIC_PATH} = require('./utils/constants')
 
-// rutas
+const courseRoutes = require('./routes/course');
+const app = express();
 
 // middlewares
 
@@ -19,10 +20,15 @@ const corsOptions = {
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
+
+// rutas
+
+app.use('/courses', courseRoutes);
+
 // settings
 
 // static files
-app.use("/api/public", express.static(path.join(__dirname, "assets/imgs")));
+app.use(PUBLIC_PATH, express.static(path.join(__dirname, "assets")));
 
 app.listen(port, () => {
   console.log(`Server on port ${port}`);
