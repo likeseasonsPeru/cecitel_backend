@@ -8,17 +8,16 @@ module.exports = {
   createOne: async (req, res) => {
     const { name } = req.body;
     const filename = req.file_name;
-
     try {
       if (filename) {
-        const newCourse = new courseModel({ name, videoUrl: filename });
+        const newCourse = new courseModel({ name, videoUrl: `${filename}` });
         const course = await newCourse.save();
-        res.json({ status: true, course });
+        res.status(201).json({ status: true, course });
       } else {
-        res.json({ status: false, err: "Hubo un error al guardar el video" });
+        res.status(422).json({ status: false, err: "video file not found" });
       }
     } catch (err) {
-      res.json({ status: false, err: err.message });
+      res.status(500).json({ status: false, err: err.message });
     }
   }
 };

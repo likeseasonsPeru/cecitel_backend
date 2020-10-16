@@ -4,15 +4,15 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const { port } = require("./config");
-const {PUBLIC_PATH} = require('./utils/constants')
+const { PUBLIC_PATH } = require("./utils/constants");
 
-const courseRoutes = require('./routes/course');
+const courseRoutes = require("./routes/course");
 const app = express();
 
 // middlewares
 
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: "false" }));
+app.use(bodyParser.urlencoded({ limit: "500mb", extended: "false" }));
 app.use(morgan("dev"));
 const corsOptions = {
   origin: ["https://www.cecitel.com.pe", "https://cecitel.com.pe"]
@@ -20,10 +20,9 @@ const corsOptions = {
 app.options("*", cors(corsOptions));
 app.use(cors(corsOptions));
 
-
 // rutas
 
-app.use('/courses', courseRoutes);
+app.use("/courses", courseRoutes);
 
 // settings
 
