@@ -5,7 +5,7 @@ const getSalt = async () => {
   return await bcrypt.genSaltSync(+saltRouds);
 };
 
-const encryptPassword = async password => {
+const encryptPassword = async (password) => {
   const salt = await getSalt();
   return await bcrypt.hashSync(password, salt);
 };

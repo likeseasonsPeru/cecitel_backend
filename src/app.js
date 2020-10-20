@@ -7,6 +7,7 @@ const { port } = require("./config");
 const { PUBLIC_PATH } = require("./utils/constants");
 
 const courseRoutes = require("./routes/course");
+const authRoutes = require("./routes/auth")
 const app = express();
 
 // middlewares
@@ -23,6 +24,7 @@ app.use(cors(corsOptions));
 // rutas
 
 app.use("/courses", courseRoutes);
+app.use("/", authRoutes);
 
 // settings
 

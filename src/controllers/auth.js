@@ -7,8 +7,12 @@ module.exports = {
   signUp: async (req, res) => {
     try {
       const { name, email, password } = req.body;
-      const encryptedPassword  = await encryptPassword(password);
-      const newUser = new userModel({ name, email, encryptedPassword });
+      const encryptedPassword = await encryptPassword(password);
+      const newUser = new userModel({
+        name,
+        email,
+        password: encryptedPassword
+      });
       await newUser.save();
       res.status(201).json({ status: true, user: newUser });
     } catch (err) {
@@ -19,18 +23,26 @@ module.exports = {
       });
     }
   },
-  signUp: async (req, res) => {
-    const { email, password } = req.body;
-    const userFound = await userModel.findOne({ email });
-    if (!userFound)
-      return res.json({ status: false, msg: "Usuario no registrado" });
-    const isCorrectPassword = await comparePassword(
-      password,
-      userFound.password
-    );
-    if (!isCorrectPassword)
-      return res.json({ status: false, msg: "Password Incorrect" });
-    const token = jwt.sign(JSON.stringify(userFound), jwtSecret);
-    res.json({ status: true, token });
+  signIn: async (req, res) => {
+    try {
+      const { email, password } = req.body;
+      const userFound = await userModel.findOne({ email });
+      if (!userFound)
+        return res.json({ status: false, msg: "Usuario no registrado" });
+      const isCorrectPassword = await comparePassword(
+        password,
+        userFound.password
+      );
+      if (!isCorrectPassword)
+        return res.json({ status: false, msg: "Password Incorrect" });
+      const token = jwt.sign(JSON.stringify(userFound), jwtSecret);
+      res.json({ status: true, token,});
+    } catch (err) {
+      res.status(422).json({
+        status: false,
+        msg: "Ocurrio un error al intentar logearse",
+        error: err.message
+      });
+    }
   }
 };
