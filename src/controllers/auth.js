@@ -6,15 +6,17 @@ const { userModel } = require("../models");
 module.exports = {
   signUp: async (req, res) => {
     try {
-      const { name, email, password } = req.body;
+      const { name, surname, email, password } = req.body;
       const encryptedPassword = await encryptPassword(password);
       const newUser = new userModel({
         name,
+        surname,
         email,
         password: encryptedPassword
       });
       await newUser.save();
-      res.status(201).json({ status: true, user: newUser });
+      const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
+      res.status(201).json({ status: true, token });
     } catch (err) {
       res.status(422).json({
         status: false,

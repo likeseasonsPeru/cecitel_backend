@@ -2,7 +2,7 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 const { Schema } = mongoose;
 
-const userSchema = new Schema(
+const teacherSchema = new Schema(
   {
     name: { type: String, required: true },
     surname: { type: String, required: true },
@@ -11,7 +11,7 @@ const userSchema = new Schema(
     type: { type: String, default: "user" },
     position: { type: String, default: null },
     image: { type: String, default: null },
-    description: {type: String, default: null}
+    description: { type: String, default: null }
   },
   {
     versionKey: false,
@@ -20,4 +20,4 @@ const userSchema = new Schema(
 );
 
 userSchema.plugin(uniqueValidator);
-module.exports = mongoose.model("user", userSchema);
+module.exports = mongoose.model("teacher", teacherSchema);

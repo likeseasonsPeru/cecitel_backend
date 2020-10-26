@@ -7,7 +7,46 @@ const courseSchema = new Schema(
       type: String,
       required: true
     },
-    videoUrl: String
+    category: {
+      type: String,
+      required: true
+    },
+    review: String,
+    teacher: {
+      type: Object,
+      required: true
+    },
+    materials: {
+      type: String,
+      default: null
+    },
+    objectives: {
+      type: String,
+      default: null
+    },
+    duration: {
+      type: Object,
+      default: null
+    },
+    difficulty: {
+      type: Object,
+      default: null
+    },
+    modules: [
+      // semiprecensiales
+      {
+        title: String,
+        duration: Number,
+        lessons: [
+          {
+            title: String,
+            urlVideo: String
+          }
+        ],
+        files: [],
+      }
+    ],
+    price: Number,
   },
   {
     versionKey: false,
