@@ -14,7 +14,7 @@ const courseSchema = new Schema(
     review: String,
     teacher: {
       type: Object,
-      required: true
+      default: null
     },
     materials: {
       type: String,
@@ -43,10 +43,18 @@ const courseSchema = new Schema(
             urlVideo: String
           }
         ],
-        files: [],
+        files: []
       }
     ],
-    price: Number,
+    price: { 
+      type: Number, 
+      required: true 
+    },
+    limit: {
+      // para cursos semiprecensiales
+      type: Number,
+      default: null
+    }
   },
   {
     versionKey: false,

@@ -4,14 +4,54 @@ const { Schema } = mongoose;
 
 const userSchema = new Schema(
   {
-    name: { type: String, required: true },
-    surname: { type: String, required: true },
+    name: { type: String, default: null },
+    surname: { type: String, default: null },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    type: { type: String, default: "user" },
-    position: { type: String, default: null },
+    category: { type: String, default: "user" },
     image: { type: String, default: null },
-    description: {type: String, default: null}
+    courses: [
+      {
+        courseid: String,
+        category: String,
+        title: String,
+        image: {
+          type: String,
+          default: null
+        },
+        time: String,
+        tasks: [
+          {
+            urls: [],
+            date: {
+              type: Date,
+              default: null
+            },
+            status: String
+          }
+        ],
+        assistance: {
+          type: Object,
+          default: null
+        },
+        startDate: Date,
+        endDate: Date,
+        teacher: Object,
+        score: {
+          type: Number,
+          default: null
+        },
+        completed: {
+          type: Boolean,
+          default: false,
+        },
+        certificate : {
+          type: String,
+          default: null
+        }
+      }
+    ],
+    favorites : []
   },
   {
     versionKey: false,
