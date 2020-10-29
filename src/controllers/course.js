@@ -3,8 +3,9 @@ const { courseModel } = require("../models");
 module.exports = {
   getAll: async (req, res) => {
     const courses = await courseModel.find();
-    res.json(courses);
+    res.status(200).json(courses);
   },
+
   createOne: async (req, res) => {
     const {
       name,
@@ -23,7 +24,6 @@ module.exports = {
         name,
         category,
         review,
-        teacher,
         materials,
         objectives,
         duration,
@@ -31,12 +31,22 @@ module.exports = {
         price,
         limit
       });
+      if (teacher){
+        newCourse.teacher = {
+          image: req.filename,
+          name: teacher.name,
+          description: teacher.description,
+          position: teacher.position
+        }
+      }
+      
       const course = await newCourse.save();
       res.status(201).json({ status: true, course });
     } catch (err) {
       res.status(500).json({ status: false, err: err.message });
     }
   },
+
   getOne: async (req, res) => {
     const course = await courseModel.findById(req.params.id);
     if (course) return res.json({ status: true, course });
@@ -46,6 +56,7 @@ module.exports = {
         msg: "No se encontro curso con este id"
       });
   },
+  
   updateOne: async (req, res) => {
     const {
       name,
