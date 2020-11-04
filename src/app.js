@@ -3,32 +3,18 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-const swaggerJsDoc = require('swagger-jsdoc');
 const swaggerUI = require('swagger-ui-express');
 
 const { port } = require("./config");
 const { PUBLIC_PATH } = require("./utils/constants");
 
-
 const courseRoutes = require("./routes/course");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
-
+const swaggerDocs = require('./helpers/swagger');
 const app = express();
 
 // settings
-
-const swaggerOptions = {
-  swaggerDefinition: {
-    info: {
-      title: "CECITEL BACKEND",
-      version: '1.0.0',
-    },
-  },
-  apis: ["src/routes/*.js"],
-}
-
-const swaggerDocs = swaggerJsDoc(swaggerOptions);
 
 
 // middlewares
@@ -44,7 +30,8 @@ app.use(cors(corsOptions));
 
 // rutas
 
-app.use("/", swaggerUI.serve, swaggerUI.setup(swaggerDocs), authRoutes);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
+app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
 app.use("/teacher",  teacherRoutes);
 

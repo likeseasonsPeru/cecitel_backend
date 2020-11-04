@@ -8,7 +8,6 @@ const teacherSchema = new Schema(
     surname: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
-    category: { type: String, default: "user" },
     position: { type: String, default: null },
     image: { type: String, default: null },
     description: { type: String, default: null }

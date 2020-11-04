@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const { imageUpload, verifyAccess} = require('../middlewares')
 
-const { getAll, createOne, getOne, updateOne, removeOne } = require("../controllers/course");
+const { getAll, createOne, getOne, updateOne, removeOne, modifyTeacherByCourseID } = require("../controllers/courses/course");
 
 
 /**
@@ -17,9 +17,10 @@ const { getAll, createOne, getOne, updateOne, removeOne } = require("../controll
  */
 
 router.get("/", verifyAccess, getAll);
-router.post("/", verifyAccess, imageUpload, createOne);
+router.post("/", verifyAccess, createOne);
 router.get("/:id", verifyAccess, getOne);
 router.put('/:id', verifyAccess, updateOne);
+router.put('/updateTeacher/:id', verifyAccess, imageUpload, modifyTeacherByCourseID);
 router.delete("/:id", verifyAccess, removeOne);
 
 module.exports = router;
