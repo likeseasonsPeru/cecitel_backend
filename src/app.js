@@ -4,13 +4,13 @@ const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
 const swaggerUI = require('swagger-ui-express');
-
-const { port } = require("./config");
-const { PUBLIC_PATH } = require("./utils/constants");
-
 const courseRoutes = require("./routes/course");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
+const modulesRoutes = require("./routes/modules");
+const { port } = require("./config");
+const { PUBLIC_PATH } = require("./utils/constants");
+
 const swaggerDocs = require('./helpers/swagger');
 const app = express();
 
@@ -30,10 +30,12 @@ app.use(cors(corsOptions));
 
 // rutas
 
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
+
 app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
 app.use("/teacher",  teacherRoutes);
+app.use("/modules", modulesRoutes);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 
 // static files

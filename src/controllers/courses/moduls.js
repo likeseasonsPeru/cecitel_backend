@@ -54,7 +54,7 @@ module.exports = {
       await course.save();
       return res
         .status(200)
-        .json({ status: true, msg: "Se elimino correctamente", data:  });
+        .json({ status: true, msg: "Se elimino correctamente", data: course});
     } catch (err) {
       return res.status(500).json({
         status: false,
