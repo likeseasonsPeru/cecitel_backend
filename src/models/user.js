@@ -51,7 +51,7 @@ const userSchema = new Schema(
         }
       }
     ],
-    favorites : []
+    favorites : [] // ids
   },
   {
     versionKey: false,

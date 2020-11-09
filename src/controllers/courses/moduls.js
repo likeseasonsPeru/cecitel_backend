@@ -5,7 +5,8 @@ module.exports = {
     try {
       const { title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
-      course.modules = [...{ title, duration }, ...course.modules];
+      console.log(course)
+      course.modules.push({title, duration})
       await course.save();
       return res
         .status(201)
@@ -21,16 +22,13 @@ module.exports = {
 
   updateOne: async (req, res) => {
     try {
-      const { title, duration } = req.body;
+      const { moduleId, title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
       let i = course.modules.findIndex(c => c._id == moduleId);
-      let msg = ''
       if (i !== -1){
         if (title) course.modules[i].title = title;
         if (duration) course.modules[i].duration = duration;
         await course.save();
-      } else {
-        
       }
       return res
         .status(200)

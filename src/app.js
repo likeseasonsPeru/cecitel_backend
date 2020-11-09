@@ -7,7 +7,7 @@ const swaggerUI = require('swagger-ui-express');
 const courseRoutes = require("./routes/course");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
-const modulesRoutes = require("./routes/modules");
+const modulesRoutes = require("./routes/courseModules");
 const { port } = require("./config");
 const { PUBLIC_PATH } = require("./utils/constants");
 
@@ -34,7 +34,7 @@ app.use(cors(corsOptions));
 app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
 app.use("/teacher",  teacherRoutes);
-app.use("/modules", modulesRoutes);
+app.use("/courses/modules", modulesRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 

@@ -21,7 +21,7 @@ module.exports = {
       res.status(422).json({
         status: false,
         msg: "No se creo ningun usuario",
-        error: err.message
+        error: err.messagez
       });
     }
   },

@@ -40,7 +40,8 @@ const courseSchema = new Schema(
         lessons: [
           {
             title: String,
-            urlVideo: String
+            duration: String,
+            urlVideo: String,
           }
         ],
         files: []
