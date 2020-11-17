@@ -44,7 +44,7 @@ const courseSchema = new Schema(
             urlVideo: String,
           }
         ],
-        files: []
+        files: [String]
       }
     ],
     price: { 

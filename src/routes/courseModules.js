@@ -5,7 +5,7 @@ const { imageUpload, verifyAccess} = require('../middlewares')
 const { createOne, removeOne, updateOne } = require("../controllers/courses/moduls");
 
 // id -> codigo del curso
-router.post("/:id", verifyAccess, createOne);
+router.post("/:id", imageUpload, createOne);
 router.put('/:id', verifyAccess, updateOne);
 router.delete("/:id", verifyAccess, removeOne);
 

@@ -9,7 +9,7 @@ const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
 const modulesRoutes = require("./routes/courseModules");
 const { port } = require("./config");
-const { PUBLIC_PATH } = require("./utils/constants");
+const { PUBLIC_FILEPATH, PUBLIC_IMGPATH, PUBLIC_TEMPLATEPATH } = require("./utils/constants");
 
 const swaggerDocs = require('./helpers/swagger');
 const app = express();
@@ -39,7 +39,10 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
 
 
 // static files
-app.use(PUBLIC_PATH, express.static(path.join(__dirname, "assets")));
+
+app.use(PUBLIC_TEMPLATEPATH, express.static(path.join(__dirname, "assets/templates")));
+app.use(PUBLIC_FILEPATH, express.static(path.join(__dirname, "assets/archivos")));
+app.use(PUBLIC_IMGPATH, express.static(path.join(__dirname, "assets/imgs")))
 
 app.listen(port, () => {
   console.log(`Server on port ${port}`);

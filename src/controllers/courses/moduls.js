@@ -5,8 +5,8 @@ module.exports = {
     try {
       const { title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
-      console.log(course)
-      course.modules.push({title, duration})
+      console.log(req.file_names)
+      course.modules.push({title, duration, files: req.file_names})
       await course.save();
       return res
         .status(201)
