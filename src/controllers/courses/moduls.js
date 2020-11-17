@@ -5,13 +5,18 @@ module.exports = {
     try {
       const { title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
-      console.log(req.file_names)
-      course.modules.push({title, duration, files: req.file_names})
+      //console.log("Los nombres de archivos son", req.file_names);
+      course.modules.push({
+        title,
+        duration,
+        files: req.file_names ? req.file_names : []
+      });
       await course.save();
       return res
         .status(201)
         .json({ status: true, msg: "Se agrego correctamente", data: course });
     } catch (err) {
+      console.log(err);
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
@@ -25,7 +30,7 @@ module.exports = {
       const { moduleId, title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
       let i = course.modules.findIndex(c => c._id == moduleId);
-      if (i !== -1){
+      if (i !== -1) {
         if (title) course.modules[i].title = title;
         if (duration) course.modules[i].duration = duration;
         await course.save();
@@ -33,7 +38,6 @@ module.exports = {
       return res
         .status(200)
         .json({ status: true, msg: "Se modifico correctamente", data: course });
-      
     } catch (err) {
       return res.status(500).json({
         status: false,
@@ -52,7 +56,7 @@ module.exports = {
       await course.save();
       return res
         .status(200)
-        .json({ status: true, msg: "Se elimino correctamente", data: course});
+        .json({ status: true, msg: "Se elimino correctamente", data: course });
     } catch (err) {
       return res.status(500).json({
         status: false,
