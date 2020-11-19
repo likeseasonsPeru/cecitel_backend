@@ -1,20 +1,28 @@
 const { courseModel } = require("../../models");
-
+const { removeFile } = require("../../utils/index");
 module.exports = {
   createOne: async (req, res) => {
     try {
       const { title, duration } = req.body;
       let course = await courseModel.findById(req.params.id);
-      //console.log("Los nombres de archivos son", req.file_names);
-      course.modules.push({
-        title,
-        duration,
-        files: req.file_names ? req.file_names : []
-      });
-      await course.save();
-      return res
-        .status(201)
-        .json({ status: true, msg: "Se agrego correctamente", data: course });
+      if (course) {
+        //console.log("Los nombres de archivos son", req.file_names);
+        course.modules.push({
+          title,
+          duration,
+          files: req.file_names ? req.file_names : []
+        });
+        await course.save();
+        return res
+          .status(201)
+          .json({ status: true, msg: "Se agrego correctamente", data: course });
+      } else {
+        // Elimina los archibos si se subieron
+        req.file_names && removeFile(req.file_names);
+        return res
+          .status(200)
+          .json({ status: false, msg: "No se encontro curso con este id" });
+      }
     } catch (err) {
       console.log(err);
       return res.status(500).json({
@@ -27,17 +35,29 @@ module.exports = {
 
   updateOne: async (req, res) => {
     try {
-      const { moduleId, title, duration } = req.body;
+      const { moduleId, title, duration, removeNames } = req.body;
       let course = await courseModel.findById(req.params.id);
-      let i = course.modules.findIndex(c => c._id == moduleId);
-      if (i !== -1) {
-        if (title) course.modules[i].title = title;
-        if (duration) course.modules[i].duration = duration;
-        await course.save();
-      }
-      return res
-        .status(200)
-        .json({ status: true, msg: "Se modifico correctamente", data: course });
+      if (course) {
+        let i = course.modules.findIndex(c => c._id == moduleId);
+        if (i !== -1) {
+          let courseFound = course.modules[i];
+          if (title) courseFound.title = title;
+          if (duration) courseFound.duration = duration;
+          if (req.file_names) {
+            removeFile(courseFound.files);
+            courseFound.files = req.file_names;
+          }
+          await course.save();
+        }
+        return res.status(200).json({
+          status: true,
+          msg: "Se modifico correctamente",
+          data: course
+        });
+      } else
+        return res
+          .status(200)
+          .json({ status: false, msg: "No hay curso con este id" });
     } catch (err) {
       return res.status(500).json({
         status: false,
@@ -50,13 +70,25 @@ module.exports = {
   removeOne: async (req, res) => {
     try {
       const course = await courseModel.findById(req.params.id);
-      const { moduleId } = req.body;
-      let i = course.modules.findIndex(c => c._id == moduleId);
-      i !== -1 && course.modules.splice(i, 1);
-      await course.save();
-      return res
-        .status(200)
-        .json({ status: true, msg: "Se elimino correctamente", data: course });
+      if (course) {
+        const { moduleId } = req.body;
+        let i = course.modules.findIndex(c => c._id == moduleId);
+        i !== -1 &&
+          // elimina los archivos y luego elimina el modulo
+          removeFile(course.modules[i].files) &&
+          course.modules.splice(i, 1);
+        await course.save();
+        return res
+          .status(200)
+          .json({
+            status: true,
+            msg: "Se elimino correctamente",
+            data: course
+          });
+      } else
+        return res
+          .status(200)
+          .json({ status: false, msg: "No hay curso con este id" });
     } catch (err) {
       return res.status(500).json({
         status: false,

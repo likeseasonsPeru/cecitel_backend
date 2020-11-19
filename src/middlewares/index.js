@@ -1,8 +1,9 @@
 const imageUpload = require("./imageUpload");
 const fileUpload = require("./fileUpload");
-const verifyAccess = require("./verifyAccess")
+const {teacherAccess, userAccess} = require("./verifyAccess")
 module.exports = {
   imageUpload,
   fileUpload,
-  verifyAccess
+  teacherAccess,
+  userAccess
 };

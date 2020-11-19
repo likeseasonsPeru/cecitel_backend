@@ -27,10 +27,12 @@ const courseSchema = new Schema(
     duration: {
       type: Object,
       default: null
+      // hours, months, timesxWeek
     },
     difficulty: {
       type: Object,
       default: null
+      //  level, description
     },
     modules: [
       // semiprecensiales
@@ -55,6 +57,11 @@ const courseSchema = new Schema(
       // para cursos semiprecensiales
       type: Number,
       default: null
+    },
+    certificate:{     // viene con certificado 
+      type: String,
+      default: null
+      // Gratuito, De pago, null
     }
   },
   {

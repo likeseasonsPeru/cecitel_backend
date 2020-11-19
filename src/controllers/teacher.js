@@ -1,10 +1,16 @@
+const jwt = require('jsonwebtoken');
+const { comparePassword, encryptPassword } = require("../helpers/bcrypt");
+const { jwtSecret } = require('../config')
 const { teacherModel } = require("../models");
 
 module.exports = {
   getAll: async (req, res) => {
-    const courses = await teacherModel.find();
+    const courses = await teacherModel.find({},{courses: 0});
     res.json(courses);
   },
+
+
+  // Registro de profesores
   createOne: async (req, res) => {
     const {
       name,
@@ -15,13 +21,14 @@ module.exports = {
       position,
       description
     } = req.body;
+    const encryptPassword = await encryptPassword(password)
     const filename = req.file_name;
     try {
       const newTeacher = new teacherModel({
         name,
         surname,
         email,
-        password,
+        password: encryptedPassword,
         category,
         position,
         description,

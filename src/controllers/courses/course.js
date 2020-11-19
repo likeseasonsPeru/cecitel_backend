@@ -20,7 +20,8 @@ module.exports = {
         duration,
         difficulty,
         price,
-        limit
+        limit,
+        certificate
       } = req.body;
       const newCourse = new courseModel({
         name,
@@ -39,7 +40,11 @@ module.exports = {
           ? { level: difficulty.level, description: difficulty.description }
           : null,
         price,
-        limit
+        limit,
+        certificate:
+          certificate == "Gratuito" || certificate == "De pago"
+            ? certificate
+            : null
       });
       const course = await newCourse.save();
       res
@@ -155,5 +160,16 @@ module.exports = {
         res.status(200).json({ status: true, msg: "Se elimino correctamente" });
       }
     });
+  },
+
+  getByFilter: async (req, res) => {
+    const { category, duration, difficulty, certificate } = req.body;
+    let Query = {};
+    category && Object.assign(Query, { category });
+    duration && Object.assign(Query, { "duration.hours": duration });
+    difficulty && Object.assign(Query, { "difficulty.level": difficulty });
+    certificate && Object.assign(Query, { certificate });
+    const courses = await courseModel.find(Query);
+    res.json(courses);
   }
 };

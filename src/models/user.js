@@ -10,6 +10,7 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     category: { type: String, default: "user" },
     image: { type: String, default: null },
+    purchases: [{}],
     courses: [
       {
         courseid: String,
@@ -43,15 +44,15 @@ const userSchema = new Schema(
         },
         completed: {
           type: Boolean,
-          default: false,
+          default: false
         },
-        certificate : {
+        certificate: {
           type: String,
           default: null
         }
       }
     ],
-    favorites : [] // ids
+    favorites: [String] // ids
   },
   {
     versionKey: false,
