@@ -58,6 +58,17 @@ module.exports = {
   },
 
   getOne: async (req, res) => {
+    try {
+
+    }catch (err){
+      return res
+        .status(500)
+        .json({
+          status: false,
+          msg: "Hubo un error",
+          err: err.message
+        });
+    }
     const course = await courseModel.findById(req.params.id);
     if (course) return res.status(200).json({ status: true, course });
     else
@@ -68,9 +79,9 @@ module.exports = {
   },
 
   modifyTeacherByCourseID: async (req, res) => {
-    const course = await courseModel.findById(req.params.id);
-    if (course) {
-      try {
+    try {
+      const course = await courseModel.findById(req.params.id);
+      if (course) {
         const { name, surname, description, position } = req.body;
         course.teacher = {
           name,
@@ -90,15 +101,19 @@ module.exports = {
           msg: "Se agrego adecuadamente",
           data: course
         });
-      } catch (err) {
+      } else {
         return res
-          .status(500)
-          .json({ status: false, msg: "Ocurrio un error", err: err.message });
+          .status(202)
+          .json({ status: false, msg: "No se encontro curso con este id" });
       }
-    } else {
+    } catch (err) {
       return res
-        .status(202)
-        .json({ status: false, msg: "No se encontro curso con este id" });
+        .status(500)
+        .json({
+          status: false,
+          msg: "Hubo un error al modificar los datos",
+          err: err.message
+        });
     }
   },
 
@@ -163,13 +178,21 @@ module.exports = {
   },
 
   getByFilter: async (req, res) => {
-    const { category, duration, difficulty, certificate } = req.body;
-    let Query = {};
-    category && Object.assign(Query, { category });
-    duration && Object.assign(Query, { "duration.hours": duration });
-    difficulty && Object.assign(Query, { "difficulty.level": difficulty });
-    certificate && Object.assign(Query, { certificate });
-    const courses = await courseModel.find(Query);
-    res.json(courses);
+    try {
+      const { category, duration, difficulty, certificate } = req.body;
+      let Query = {};
+      category && Object.assign(Query, { category });
+      duration && Object.assign(Query, { "duration.hours": duration });
+      difficulty && Object.assign(Query, { "difficulty.level": difficulty });
+      certificate && Object.assign(Query, { certificate });
+      const courses = await courseModel.find(Query);
+      res.json(courses);
+    } catch (err) {
+      return res.status(500).json({
+        status: false,
+        msg: "Hubo un error",
+        err: err.message
+      });
+    }
   }
 };

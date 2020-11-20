@@ -1,12 +1,14 @@
 const express = require("express");
 const router = express.Router();
 
-const {imageUpload, userAccess} = require('../middlewares')
+const {imageUpload, verifyAccess} = require('../middlewares')
 
-const {getAll, getOne, createOne} = require("../controllers/teacher");
+const {getAll, getOne, createOne, updateOne, removeOne} = require("../controllers/teacher");
 
-router.get("/", userAccess, getAll); // login
-router.post("/", userAccess, imageUpload, createOne); // registro
-router.get("/:id", userAccess, getOne)
+router.get("/", verifyAccess, getAll); 
+router.post("/", verifyAccess, imageUpload, createOne);  // registro de profesores
+router.get("/:id", verifyAccess, getOne)
+router.put("/:id", verifyAccess, imageUpload, updateOne)
+router.delete("/:id", verifyAccess, removeOne)
 
 module.exports = router;

@@ -20,7 +20,7 @@ module.exports = {
         // Elimina los archibos si se subieron
         req.file_names && removeFile(req.file_names);
         return res
-          .status(200)
+          .status(202)
           .json({ status: false, msg: "No se encontro curso con este id" });
       }
     } catch (err) {
@@ -51,12 +51,12 @@ module.exports = {
         }
         return res.status(200).json({
           status: true,
-          msg: "Se modifico correctamente",
+          msg: "Modificado correctamente",
           data: course
         });
       } else
         return res
-          .status(200)
+          .status(202)
           .json({ status: false, msg: "No hay curso con este id" });
     } catch (err) {
       return res.status(500).json({
@@ -82,12 +82,12 @@ module.exports = {
           .status(200)
           .json({
             status: true,
-            msg: "Se elimino correctamente",
+            msg: "Eliminado correctamente",
             data: course
           });
       } else
         return res
-          .status(200)
+          .status(202)
           .json({ status: false, msg: "No hay curso con este id" });
     } catch (err) {
       return res.status(500).json({

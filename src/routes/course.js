@@ -1,6 +1,6 @@
 const express = require("express");
 const router = express.Router();
-const { imageUpload, userAccess } = require("../middlewares");
+const { imageUpload, verifyAccess } = require("../middlewares");
 
 const {
   getAll,
@@ -23,9 +23,9 @@ const {
  *
  */
 
-router.get("/", userAccess, getAll);
+router.get("/", verifyAccess, getAll);
 
-router.post("/", userAccess, createOne);
+router.post("/", verifyAccess, createOne);
 
 /**
  * @swagger
@@ -38,19 +38,19 @@ router.post("/", userAccess, createOne);
  *
  */
 
-router.get("/:id", userAccess, getOne);
+router.get("/:id", verifyAccess, getOne);
 
-router.put("/:id", userAccess, updateOne);
+router.put("/:id", verifyAccess, updateOne);
 
 router.put(
   "/updateTeacher/:id",
-  userAccess,
+  verifyAccess,
   imageUpload,
   modifyTeacherByCourseID
 );
 
-router.delete("/:id", userAccess, removeOne);
+router.delete("/:id", verifyAccess, removeOne);
 
-router.post("/getByFiler", userAccess, getByFilter);
+router.post("/getByFiler", verifyAccess, getByFilter);
 
 module.exports = router;

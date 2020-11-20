@@ -1,27 +1,14 @@
-const jwt = require('jsonwebtoken');
-const {jwtSecret} = require('../config');
+const jwt = require("jsonwebtoken");
+const { jwtSecret } = require("../config");
 
-module.exports = {
-    userAccess: (req, res, next) => {
-        const authHeader = req.headers.authorization;
-        const token = authHeader && authHeader.split(' ')[1];
-        if (!token) return res.status(401).json({status: false, msg: 'No token provided'})
-        jwt.verify(token, jwtSecret, (err, user) => {
-            if (err) res.status(403).json({status: false, msg: 'Unauthorized'});
-            req.userData = user;
-            next();
-        })
-    },
-
-    teacherAccess: (req, res, next) => {
-        const authHeader = req.headers.authorization;
-        const token = authHeader && authHeader.split(' ')[1];
-        if (!token) return res.status(401).json({status: false, msg: 'No token provided'})
-        jwt.verify(token, jwtSecret, (err, user) => {
-            if (err) res.status(403).json({status: false, msg: 'Unauthorized'});
-            req.userData = user;
-            next();
-        })
-    }
-}
-
+module.exports = (req, res, next) => {
+  const authHeader = req.headers.authorization;
+  const token = authHeader && authHeader.split(" ")[1];
+  if (!token)
+    return res.status(401).json({ status: false, msg: "No token provided" });
+  jwt.verify(token, jwtSecret, (err, user) => {
+    if (err) res.status(403).json({ status: false, msg: "Unauthorized" });
+    req.userData = user;
+    next();
+  });
+};

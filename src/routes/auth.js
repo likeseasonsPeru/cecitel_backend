@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const {signUp, signIn} = require("../controllers/auth");
+const {signUp, signIn, signInTeacher} = require("../controllers/auth");
 
 
 /**
@@ -18,6 +18,8 @@ const {signUp, signIn} = require("../controllers/auth");
  */
 
 router.post("/signin", signIn); // login
+
+router.post("/signinTeacher", signInTeacher)
 
 /**
  * @swagger
