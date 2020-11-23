@@ -12,14 +12,13 @@ module.exports = {
 
   // Registro de profesores
   createOne: async (req, res) => {
-    const { name, surname, email, password, position, description } = req.body;
+    const { name, email, password, position, description } = req.body;
 
     try {
       const encryptedPassword = await encryptPassword(password);
       const filename = req.file_names;
       const newTeacher = new teacherModel({
         name,
-        surname,
         email,
         password: encryptedPassword,
         position,
@@ -67,7 +66,6 @@ module.exports = {
       if (teacher) {
         const {
           name,
-          surname,
           email,
           password,
           position,
@@ -76,7 +74,6 @@ module.exports = {
         const filename = req.file_names;
 
         if (name) teacher.name = name;
-        if (surname) teacher.surname = surname;
         if (email) teacher.email = email;
         if (password) teacher.password = await encryptPassword(password);
         if (position) teacher.position = position;

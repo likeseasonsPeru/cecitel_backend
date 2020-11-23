@@ -10,7 +10,7 @@ const {
   removeOne,
   modifyTeacherByCourseID,
   getByFilter
-} = require("../controllers/courses/course");
+} = require("../controllers/course");
 
 /**
  * @swagger

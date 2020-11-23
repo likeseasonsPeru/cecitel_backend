@@ -5,7 +5,6 @@ const { Schema } = mongoose;
 const teacherSchema = new Schema(
   {
     name: { type: String, required: true },
-    surname: { type: String, required: true },
     email: { type: String, unique: true, required: true },
     password: { type: String, required: true },
     position: { type: String, default: null },
@@ -47,7 +46,6 @@ const teacherSchema = new Schema(
           {
             studentId: String,
             name: String,
-            surname: String,
             dni: String,
             score: Number,  
             assistance: [     

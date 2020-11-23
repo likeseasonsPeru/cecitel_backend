@@ -1,5 +1,5 @@
-const { courseModel } = require("../../models");
-const { removeFile } = require("../../utils/index");
+const { courseModel } = require("../models");
+const { removeFile } = require("../utils/index");
 module.exports = {
   createOne: async (req, res) => {
     try {

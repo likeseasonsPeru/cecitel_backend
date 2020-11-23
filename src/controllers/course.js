@@ -1,4 +1,4 @@
-const { courseModel } = require("../../models");
+const { courseModel } = require("../models");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -82,10 +82,9 @@ module.exports = {
     try {
       const course = await courseModel.findById(req.params.id);
       if (course) {
-        const { name, surname, description, position } = req.body;
+        const { name, description, position } = req.body;
         course.teacher = {
           name,
-          surname,
           description,
           position,
           image: req.file_name
@@ -194,5 +193,5 @@ module.exports = {
         err: err.message
       });
     }
-  }
+  },
 };

@@ -6,25 +6,27 @@ const { userModel, teacherModel } = require("../models");
 module.exports = {
   signUp: async (req, res) => {
     try {
-      const { name, surname, dni, email, password } = req.body;
+      const { name, dni, email, password } = req.body;
       const encryptedPassword = await encryptPassword(password);
       const newUser = new userModel({
         name,
-        surname,
         email,
         dni,
         password: encryptedPassword
       });
-      // await newUser.save();
+     /*  await newUser.save();
+      const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
+      res.status(201).json({ status: true, token, id: newUser }); */
       newUser.save((err, postUser) => {
         if (err)
-          return res.status(202).json({
+          return res.status(500).json({
             status: false,
-            msg: "Ya existe un usuario con este email"
+            msg: "No se creo ningun usuario, el email ya existe o falta algun campo",
+            err: err.message
           });
         else {
-          const token = jwt.sign(JSON.stringify(postUser), jwtSecret);
-          res.status(201).json({ status: true, token, data: postUser });
+          const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
+          res.status(201).json({ status: true, token, id: newUser._id });
         }
       });
     } catch (err) {
