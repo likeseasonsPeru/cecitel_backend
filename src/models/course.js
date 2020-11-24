@@ -7,6 +7,10 @@ const courseSchema = new Schema(
       type: String,
       required: true
     },
+    image: {
+      type: String,
+      default: null
+    },
     category: {
       type: String,
       required: true
@@ -28,6 +32,10 @@ const courseSchema = new Schema(
       type: Object,
       default: null
       // hours, months, timesxWeek
+    },
+    schedule: {   // solo para semiprecensiales y corpotarivos
+      type: String,
+      default: null
     },
     difficulty: {
       type: Object,

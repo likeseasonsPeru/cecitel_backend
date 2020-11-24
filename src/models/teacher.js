@@ -12,14 +12,15 @@ const teacherSchema = new Schema(
     description: { type: String, default: null },
     courses: [
       {
-        courseid: String,
+        /* courseid: String,
         category: String,
-        title: String,
+        name: String,
         image: {
           type: String,
           default: null
         },
-        time: String,
+        time: String,   // horario si es que hubiera , 7:00 a 9:00  */
+        course: {type: Schema.ObjectId, ref: "course"},
         tasks: [
           {
             title: String,
@@ -35,9 +36,18 @@ const teacherSchema = new Schema(
             files: [],
           }
         ],
-        startDate: Date,
-        endDate: Date,
-        numLessons: Number,
+        startDate: {
+          type: String,
+          default: null
+        },
+        endDate: {
+          type: String,
+          default: null
+        },
+        numLessons: {   // Cantidad de lecciones 
+          type: Number,
+          default: null  
+        },  
         currentLesson: {
           type: Number,
           default: 0

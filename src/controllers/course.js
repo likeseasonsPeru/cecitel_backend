@@ -21,7 +21,8 @@ module.exports = {
         difficulty,
         price,
         limit,
-        certificate
+        certificate,
+        schedule
       } = req.body;
       const newCourse = new courseModel({
         name,
@@ -41,6 +42,7 @@ module.exports = {
           : null,
         price,
         limit,
+        schedule,
         certificate:
           certificate == "Gratuito" || certificate == "De pago"
             ? certificate
@@ -49,7 +51,7 @@ module.exports = {
       const course = await newCourse.save();
       res
         .status(201)
-        .json({ status: true, msg: "Se agrego adecuadamente", data: course });
+        .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
       res
         .status(500)
@@ -97,7 +99,7 @@ module.exports = {
         await course.save();
         return res.status(201).json({
           status: true,
-          msg: "Se agrego adecuadamente",
+          msg: "Modificado correctamente correctamente",
           data: course
         });
       } else {
@@ -126,7 +128,8 @@ module.exports = {
       duration,
       difficulty,
       price,
-      limit
+      limit,
+      schedule
     } = req.body;
     try {
       const course = await courseModel.findById(req.params.id);
@@ -140,7 +143,8 @@ module.exports = {
         if (difficulty) course.difficulty = difficulty;
         if (price) course.price = price;
         if (limit) course.limit = limit;
-
+        if (schedule) course.schedule = schedule;
+        
         const courseSaved = await course.save();
         res.status(200).json({
           status: true,
@@ -171,7 +175,7 @@ module.exports = {
           err: err.message
         });
       else {
-        res.status(200).json({ status: true, msg: "Se elimino correctamente" });
+        res.status(200).json({ status: true, msg: "Eliminado correctamente" });
       }
     });
   },

@@ -3,19 +3,23 @@ const morgan = require("morgan");
 const bodyParser = require("body-parser");
 const path = require("path");
 const cors = require("cors");
-const swaggerUI = require('swagger-ui-express');
+const swaggerUI = require("swagger-ui-express");
 const courseRoutes = require("./routes/course");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
-const modulesRoutes = require("./routes/courseModules");
+const teacherCoursesRoutes = require("./routes/teacherCourse");
+const courseModulesRoutes = require("./routes/courseModules");
 const { port } = require("./config");
-const { PUBLIC_FILEPATH, PUBLIC_IMGPATH, PUBLIC_TEMPLATEPATH } = require("./utils/constants");
+const {
+  PUBLIC_FILEPATH,
+  PUBLIC_IMGPATH,
+  PUBLIC_TEMPLATEPATH
+} = require("./utils/constants");
 
-const swaggerDocs = require('./helpers/swagger');
+const swaggerDocs = require("./helpers/swagger");
 const app = express();
 
 // settings
-
 
 // middlewares
 
@@ -30,19 +34,24 @@ app.use(cors(corsOptions));
 
 // rutas
 
-
 app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
-app.use("/teacher",  teacherRoutes);
-app.use("/courses/modules", modulesRoutes);
-app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs))
-
+app.use("/teacher", teacherRoutes);
+app.use("/teacher/courses", teacherCoursesRoutes);
+app.use("/courses/modules", courseModulesRoutes);
+app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // static files
 
-app.use(PUBLIC_TEMPLATEPATH, express.static(path.join(__dirname, "assets/templates")));
-app.use(PUBLIC_FILEPATH, express.static(path.join(__dirname, "assets/archivos")));
-app.use(PUBLIC_IMGPATH, express.static(path.join(__dirname, "assets/imgs")))
+app.use(
+  PUBLIC_TEMPLATEPATH,
+  express.static(path.join(__dirname, "assets/templates"))
+);
+app.use(
+  PUBLIC_FILEPATH,
+  express.static(path.join(__dirname, "assets/archivos"))
+);
+app.use(PUBLIC_IMGPATH, express.static(path.join(__dirname, "assets/imgs")));
 
 app.listen(port, () => {
   console.log(`Server on port ${port}`);

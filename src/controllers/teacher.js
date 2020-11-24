@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const { comparePassword, encryptPassword } = require("../helpers/bcrypt");
 const { jwtSecret } = require("../config");
 const { removeImage } = require("../utils");
-const { teacherModel } = require("../models");
+const { teacherModel, courseModel } = require("../models");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -44,7 +44,9 @@ module.exports = {
 
   getOne: async (req, res) => {
     try {
-      const teacher = await teacherModel.findById(req.params.id);
+      const teacher = await teacherModel
+        .findById(req.params.id)
+        .populate({ path: "courses.course", select: "-modules -teacher" });
       if (teacher) return res.json({ status: true, data: teacher });
       else
         return res.status(202).json({
@@ -64,13 +66,7 @@ module.exports = {
     try {
       const teacher = await teacherModel.findById(req.params.id);
       if (teacher) {
-        const {
-          name,
-          email,
-          password,
-          position,
-          description
-        } = req.body;
+        const { name, email, password, position, description } = req.body;
         const filename = req.file_names;
 
         if (name) teacher.name = name;
@@ -87,10 +83,16 @@ module.exports = {
           if (err) {
             return res.status(202).json({
               status: false,
-              msg: "Ya existe un profesor con este email",
+              msg: "Ya existe un profesor con este email"
             });
           } else
-            return res.status(200).json({ status: true, msg: 'Modificado correctamente',data: postTeacher });
+            return res
+              .status(200)
+              .json({
+                status: true,
+                msg: "Modificado correctamente",
+                data: postTeacher
+              });
         });
       } else {
         return res.status(202).json({

@@ -15,7 +15,7 @@ module.exports = {
         await course.save();
         return res
           .status(201)
-          .json({ status: true, msg: "Se agrego correctamente", data: course });
+          .json({ status: true, msg: "Agregado correctamente", data: course });
       } else {
         // Elimina los archibos si se subieron
         req.file_names && removeFile(req.file_names);
@@ -35,10 +35,10 @@ module.exports = {
 
   updateOne: async (req, res) => {
     try {
-      const { moduleId, title, duration, removeNames } = req.body;
+      const { idModule, title, duration, removeNames } = req.body;
       let course = await courseModel.findById(req.params.id);
       if (course) {
-        let i = course.modules.findIndex(c => c._id == moduleId);
+        let i = course.modules.findIndex(c => c._id == idModule);
         if (i !== -1) {
           let courseFound = course.modules[i];
           if (title) courseFound.title = title;
@@ -71,8 +71,8 @@ module.exports = {
     try {
       const course = await courseModel.findById(req.params.id);
       if (course) {
-        const { moduleId } = req.body;
-        let i = course.modules.findIndex(c => c._id == moduleId);
+        const { idModule } = req.body;
+        let i = course.modules.findIndex(c => c._id == idModule);
         i !== -1 &&
           // elimina los archivos y luego elimina el modulo
           removeFile(course.modules[i].files) &&
@@ -82,8 +82,7 @@ module.exports = {
           .status(200)
           .json({
             status: true,
-            msg: "Eliminado correctamente",
-            data: course
+            msg: "Eliminado correctamente"
           });
       } else
         return res
