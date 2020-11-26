@@ -17,7 +17,8 @@ const courseSchema = new Schema(
     },
     review: String,
     teacher: {
-      type: Object,
+      type: Schema.ObjectId,
+      ref: "teacher",
       default: null
     },
     materials: {

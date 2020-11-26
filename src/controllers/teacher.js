@@ -103,7 +103,7 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error al intentar modificar los datos del profesor",
+        msg: "Hubo un error",
         err: err.message
       });
     }

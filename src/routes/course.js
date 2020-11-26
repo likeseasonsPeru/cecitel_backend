@@ -8,7 +8,6 @@ const {
   getOne,
   updateOne,
   removeOne,
-  modifyTeacherByCourseID,
   getByFilter
 } = require("../controllers/course");
 
@@ -25,7 +24,7 @@ const {
 
 router.get("/", verifyAccess, getAll);
 
-router.post("/", verifyAccess, createOne);
+router.post("/", verifyAccess, imageUpload, createOne);
 
 /**
  * @swagger
@@ -40,14 +39,7 @@ router.post("/", verifyAccess, createOne);
 
 router.get("/:id", verifyAccess, getOne);
 
-router.put("/:id", verifyAccess, updateOne);
-
-router.put(
-  "/updateTeacher/:id",
-  verifyAccess,
-  imageUpload,
-  modifyTeacherByCourseID
-);
+router.put("/:id", verifyAccess, imageUpload, updateOne);
 
 router.delete("/:id", verifyAccess, removeOne);
 

@@ -1,8 +1,9 @@
 const { courseModel } = require("../models");
+const { removeImage } = require("../utils/index");
 
 module.exports = {
   getAll: async (req, res) => {
-    const courses = await courseModel.find();
+    const courses = await courseModel.find({}, { modules: 0 });
     res.status(200).json({
       status: true,
       data: courses
@@ -11,10 +12,11 @@ module.exports = {
 
   createOne: async (req, res) => {
     try {
-      const {
+      let {
         name,
         category,
         review,
+        teacher,
         materials,
         objectives,
         duration,
@@ -24,10 +26,22 @@ module.exports = {
         certificate,
         schedule
       } = req.body;
+      const filename = req.file_names;
+      duration = duration
+        ? duration.hours
+          ? duration
+          : JSON.parse(duration)
+        : null;
+      difficulty = difficulty
+        ? difficulty.level
+          ? difficulty
+          : JSON.parse(difficulty)
+        : null;
       const newCourse = new courseModel({
         name,
         category,
         review,
+        teacher,
         materials,
         objectives,
         duration: duration
@@ -46,13 +60,15 @@ module.exports = {
         certificate:
           certificate == "Gratuito" || certificate == "De pago"
             ? certificate
-            : null
+            : null,
+        image: filename ? filename[0] : null
       });
       const course = await newCourse.save();
       res
         .status(201)
         .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
+      req.file_names && removeImage(req.file_names)
       res
         .status(500)
         .json({ status: false, msg: "Ocurrio un error", err: err.message });
@@ -61,60 +77,21 @@ module.exports = {
 
   getOne: async (req, res) => {
     try {
-
-    }catch (err){
-      return res
-        .status(500)
-        .json({
+      const course = await courseModel
+        .findById(req.params.id)
+        .populate({ path: "teacher", select: "-courses" });
+      if (course) return res.status(200).json({ status: true, course });
+      else
+        return res.status(202).json({
           status: false,
-          msg: "Hubo un error",
-          err: err.message
+          msg: "No se encontro curso con este id"
         });
-    }
-    const course = await courseModel.findById(req.params.id);
-    if (course) return res.status(200).json({ status: true, course });
-    else
-      return res.status(202).json({
-        status: false,
-        msg: "No se encontro curso con este id"
-      });
-  },
-
-  modifyTeacherByCourseID: async (req, res) => {
-    try {
-      const course = await courseModel.findById(req.params.id);
-      if (course) {
-        const { name, description, position } = req.body;
-        course.teacher = {
-          name,
-          description,
-          position,
-          image: req.file_name
-            ? `${req.file_name}`
-            : course.teacher
-            ? course.teacher.image
-            : null
-        };
-
-        await course.save();
-        return res.status(201).json({
-          status: true,
-          msg: "Modificado correctamente correctamente",
-          data: course
-        });
-      } else {
-        return res
-          .status(202)
-          .json({ status: false, msg: "No se encontro curso con este id" });
-      }
     } catch (err) {
-      return res
-        .status(500)
-        .json({
-          status: false,
-          msg: "Hubo un error al modificar los datos",
-          err: err.message
-        });
+      return res.status(500).json({
+        status: false,
+        msg: "Hubo un error",
+        err: err.message
+      });
     }
   },
 
@@ -123,6 +100,7 @@ module.exports = {
       name,
       category,
       review,
+      teacher,
       materials,
       objectives,
       duration,
@@ -131,43 +109,57 @@ module.exports = {
       limit,
       schedule
     } = req.body;
+    const filename = req.file_names;
     try {
       const course = await courseModel.findById(req.params.id);
       if (course) {
         if (name) course.name = name;
         if (category) course.category = category;
         if (review) course.review = category;
+        if (teacher) course.teacher = teacher;
         if (materials) course.materials = materials;
         if (objectives) course.objectives = objectives;
-        if (duration) course.duration = duration;
-        if (difficulty) course.difficulty = difficulty;
+        if (duration)
+          course.duration = duration.hours 
+            ? duration 
+            : JSON.parse(duration);
+        if (difficulty)
+          course.difficulty = difficulty.level
+            ? difficulty
+            : JSON.parse(difficulty);
         if (price) course.price = price;
         if (limit) course.limit = limit;
         if (schedule) course.schedule = schedule;
-        
-        const courseSaved = await course.save();
+        if (filename) {
+          removeImage(course.image);
+          course.image = filename[0];
+        }
+
+        await course.save();
         res.status(200).json({
           status: true,
-          msg: "Se modifico correctamente",
-          data: courseSaved
+          msg: "Modificado correctamente",
+          data: course
         });
       } else {
+        filename && removeImage(filename)
         return res.status(202).json({
           status: false,
           msg: "No se encontro curso con este id"
         });
       }
     } catch (err) {
+      filename && removeImage(filename)
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error al intentar modificar el curso",
+        msg: "Hubo un error",
         err: err.message
       });
     }
   },
 
   removeOne: async (req, res) => {
-    courseModel.findByIdAndRemove(req.params.id, async (err, post) => {
+    courseModel.findByIdAndRemove(req.params.id, async (err, course) => {
       if (err)
         return res.status(500).json({
           status: false,
@@ -175,6 +167,7 @@ module.exports = {
           err: err.message
         });
       else {
+        course && removeImage(course.image);
         res.status(200).json({ status: true, msg: "Eliminado correctamente" });
       }
     });
@@ -197,5 +190,5 @@ module.exports = {
         err: err.message
       });
     }
-  },
+  }
 };
