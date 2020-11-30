@@ -40,12 +40,12 @@ module.exports = {
       if (course) {
         let i = course.modules.findIndex(c => c._id == idModule);
         if (i !== -1) {
-          let courseFound = course.modules[i];
-          if (title) courseFound.title = title;
-          if (duration) courseFound.duration = duration;
+          let moduleFound = course.modules[i];
+          if (title) moduleFound.title = title;
+          if (duration) moduleFound.duration = duration;
           if (req.file_names) {
-            removeFile(courseFound.files);
-            courseFound.files = req.file_names;
+            removeFile(moduleFound.files);
+            moduleFound.files = req.file_names;
           }
           await course.save();
         }

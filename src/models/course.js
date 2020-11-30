@@ -34,7 +34,11 @@ const courseSchema = new Schema(
       default: null
       // hours, months, timesxWeek
     },
-    schedule: {   // solo para semiprecensiales y corpotarivos
+    startDate: {  // solo para semiprecensiales y corpotarivos, webinars  ejm:  15 de Octubre
+      type: String,
+      default: null
+    },
+    schedule: {   // solo para semiprecensiales y corpotarivos, webinars  ejm:  07:00 pm, a 09:00 pm
       type: String,
       default: null
     },
@@ -63,7 +67,7 @@ const courseSchema = new Schema(
       required: true 
     },
     limit: {
-      // para cursos semiprecensiales
+      // solo para semiprecensiales y corpotarivos, webinars
       type: Number,
       default: null
     },

@@ -8,6 +8,7 @@ const courseRoutes = require("./routes/course");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
 const teacherCoursesRoutes = require("./routes/teacherCourse");
+const teacherCoursesTaskRoutes = require("./routes/teacherCourseTask");
 const courseModulesRoutes = require("./routes/courseModules");
 const { port } = require("./config");
 const {
@@ -38,6 +39,7 @@ app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
 app.use("/teacher", teacherRoutes);
 app.use("/teacher/courses", teacherCoursesRoutes);
+app.use("/teacher/courses/tasks", teacherCoursesTaskRoutes);
 app.use("/courses/modules", courseModulesRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 

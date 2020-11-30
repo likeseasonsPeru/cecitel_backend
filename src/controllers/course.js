@@ -24,7 +24,8 @@ module.exports = {
         price,
         limit,
         certificate,
-        schedule
+        schedule,
+        startDate,
       } = req.body;
       const filename = req.file_names;
       duration = duration
@@ -57,6 +58,7 @@ module.exports = {
         price,
         limit,
         schedule,
+        startDate,
         certificate:
           certificate == "Gratuito" || certificate == "De pago"
             ? certificate
@@ -107,7 +109,8 @@ module.exports = {
       difficulty,
       price,
       limit,
-      schedule
+      schedule,
+      startDate
     } = req.body;
     const filename = req.file_names;
     try {
@@ -130,6 +133,7 @@ module.exports = {
         if (price) course.price = price;
         if (limit) course.limit = limit;
         if (schedule) course.schedule = schedule;
+        if (startDate) course.startDate = startDate;
         if (filename) {
           removeImage(course.image);
           course.image = filename[0];

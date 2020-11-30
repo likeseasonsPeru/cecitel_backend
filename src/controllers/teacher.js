@@ -46,12 +46,12 @@ module.exports = {
     try {
       const teacher = await teacherModel
         .findById(req.params.id)
-        .populate({ path: "courses.course", select: "-modules -teacher" });
+        .populate({ path: "courses.course", select: "-modules -teacher, -_id" });
       if (teacher) return res.json({ status: true, data: teacher });
       else
         return res.status(202).json({
           status: false,
-          msg: "No se encontro curso con este id"
+          msg: "No se encontro profesor con este id"
         });
     } catch (err) {
       return res.status(500).json({
@@ -97,7 +97,7 @@ module.exports = {
       } else {
         return res.status(202).json({
           status: false,
-          msg: "No se encontro curso con este id"
+          msg: "No se encontro profesor con este id"
         });
       }
     } catch (err) {
@@ -114,12 +114,12 @@ module.exports = {
       if (err) {
         res.status(500).json({
           status: false,
-          msg: "No se elimino ningun curso",
+          msg: "No se elimino ningun profesor",
           err: err.message
         });
       } else {
         teacher && removeImage(teacher.image);
-        res.status(200).json({ status: true, msg: "Se elimino correctamente" });
+        res.status(200).json({ status: true, msg: "Eliminado correctamente" });
       }
     });
   }

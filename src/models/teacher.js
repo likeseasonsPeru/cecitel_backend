@@ -20,20 +20,17 @@ const teacherSchema = new Schema(
           default: null
         },
         time: String,   // horario si es que hubiera , 7:00 a 9:00  */
-        course: {type: Schema.ObjectId, ref: "course"},
+        course: { type: Schema.ObjectId, ref: "course" },
         tasks: [
           {
-            title: String,
-            date: {
-              type: Date,
-              default: Date.now()
-            },
-            total: Number,
+            title: { type: String, required: true },
+            date: { type: String, required: true },
+            total: Number, // equivalete al total de alumnos del curso
             current: {
               type: Number,
               default: 0
             },
-            files: [],
+            files: []
           }
         ],
         startDate: {
@@ -44,31 +41,32 @@ const teacherSchema = new Schema(
           type: String,
           default: null
         },
-        numLessons: {   // Cantidad de lecciones 
+        numLessons: {
+          // Cantidad de lecciones
           type: Number,
-          default: null  
-        },  
+          default: null
+        },
         currentLesson: {
           type: Number,
           default: 0
         },
         students: [
           {
-            studentId: String,
-            name: String,
+            studentId: { type: Schema.ObjectId, ref: "user" },
+            /* name: String,
             dni: String,
-            score: Number,  
-            assistance: [     
+            score: Number,   */
+            assistance: [
               {
                 order: Number,
                 present: {
                   type: Boolean,
                   default: false
-                },
+                }
               }
             ]
           }
-        ],
+        ]
       }
     ]
   },
