@@ -52,6 +52,7 @@ const courseSchema = new Schema(
       {
         title: String,
         duration: Number,
+        // Enlatados
         lessons: [
           {
             title: String,

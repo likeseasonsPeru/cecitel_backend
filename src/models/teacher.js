@@ -30,7 +30,7 @@ const teacherSchema = new Schema(
               type: Number,
               default: 0
             },
-            files: []
+            files: [],
           }
         ],
         startDate: {
@@ -50,9 +50,12 @@ const teacherSchema = new Schema(
           type: Number,
           default: 0
         },
+        lessons: [
+
+        ],
         students: [
           {
-            studentId: { type: Schema.ObjectId, ref: "user" },
+            idStudent: { type: Schema.ObjectId, ref: "user" },
             /* name: String,
             dni: String,
             score: Number,   */

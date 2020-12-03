@@ -46,7 +46,7 @@ module.exports = {
     try {
       const teacher = await teacherModel
         .findById(req.params.id)
-        .populate({ path: "courses.course", select: "-modules -teacher, -_id" });
+        .populate({ path: "courses.course", select: "-modules -teacher -_id" });
       if (teacher) return res.json({ status: true, data: teacher });
       else
         return res.status(202).json({

@@ -27,7 +27,7 @@ module.exports = (req, res, next) => {
   fileUpload(req, res, err => {
     if (err) {
       console.log(err)
-      res.json({ status: false, msg: "Image error", err: err.message });
+      return res.status(500).json({ status: false, msg: "Image error", err: err.message });
     }
     next();
     

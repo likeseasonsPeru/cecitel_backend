@@ -33,11 +33,11 @@ module.exports = {
       if (teacher) {
         let i = teacher.courses.findIndex(t => t._id == idCourse);
         if (i !== -1) {
-          let teacherFound = teacher.courses[i];
-          if (course) teacherFound.course = course;
-          if (startDate) teacherFound.startDate = startDate;
-          if (endDate) teacherFound.endDate = endDate;
-          if (numLessons) teacherFound.numLessons = numLessons;
+          let courseFound = teacher.courses[i];
+          if (course) courseFound.course = course;
+          if (startDate) courseFound.startDate = startDate;
+          if (endDate) courseFound.endDate = endDate;
+          if (numLessons) courseFound.numLessons = numLessons;
           await teacher.save();
         }
         return res.status(200).json({

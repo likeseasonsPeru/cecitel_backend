@@ -14,23 +14,24 @@ module.exports = {
         dni,
         password: encryptedPassword
       });
-     /*  await newUser.save();
+      /*  await newUser.save();
       const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
       res.status(201).json({ status: true, token, id: newUser }); */
       newUser.save((err, postUser) => {
         if (err)
           return res.status(500).json({
             status: false,
-            msg: "No se creo ningun usuario, el email ya existe o falta algun campo",
+            msg:
+              "No se creo ningun usuario, el email ya existe o falta algun campo",
             err: err.message
           });
         else {
           const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
-          res.status(201).json({ status: true, token, id: newUser._id });
+          return res.status(201).json({ status: true, token, id: newUser._id });
         }
       });
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         status: false,
         msg: "Hubo un error. No se creo ningun usuario",
         error: err.message
@@ -58,9 +59,9 @@ module.exports = {
           .status(202)
           .json({ status: false, msg: "Password incorrecto" });
       const token = jwt.sign(JSON.stringify(userFound), jwtSecret);
-      res.status(200).json({ status: true, token, id: userFound._id });
+      return res.status(200).json({ status: true, token, id: userFound._id });
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         status: false,
         msg: "Ocurrio un error al intentar logearse",
         error: err.message
@@ -88,9 +89,11 @@ module.exports = {
           .status(202)
           .json({ status: false, msg: "Password incorrecto" });
       const token = jwt.sign(JSON.stringify(teacherFound), jwtSecret);
-      res.status(200).json({ status: true, token, id: teacherFound._id });
+      return res
+        .status(200)
+        .json({ status: true, token, id: teacherFound._id });
     } catch (err) {
-      res.status(500).json({
+      return res.status(500).json({
         status: false,
         msg: "Ocurrio un error al intentar logearse",
         error: err.message

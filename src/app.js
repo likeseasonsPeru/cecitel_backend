@@ -10,6 +10,8 @@ const teacherRoutes = require("./routes/teacher");
 const teacherCoursesRoutes = require("./routes/teacherCourse");
 const teacherCoursesTaskRoutes = require("./routes/teacherCourseTask");
 const courseModulesRoutes = require("./routes/courseModules");
+const userRoutes = require("./routes/user");
+
 const { port } = require("./config");
 const {
   PUBLIC_FILEPATH,
@@ -41,6 +43,7 @@ app.use("/teacher", teacherRoutes);
 app.use("/teacher/courses", teacherCoursesRoutes);
 app.use("/teacher/courses/tasks", teacherCoursesTaskRoutes);
 app.use("/courses/modules", courseModulesRoutes);
+app.use("/user", userRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // static files

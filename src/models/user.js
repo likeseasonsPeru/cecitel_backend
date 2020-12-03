@@ -6,21 +6,14 @@ const userSchema = new Schema(
   {
     name: { type: String, default: null, required: true },
     email: { type: String, unique: true, required: true },
-    dni: {type: String, required: true},
+    dni: { type: String, required: true },
     password: { type: String, required: true },
     category: { type: String, default: "user" },
     image: { type: String, default: null },
     purchases: [{}],
     courses: [
       {
-        courseid: String,
-        category: String,
-        title: String,
-        image: {
-          type: String,
-          default: null
-        },
-        time: String,
+        course: { type: Schema.ObjectId, ref: "course" },
         tasks: [
           {
             urls: [],
