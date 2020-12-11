@@ -11,6 +11,7 @@ const teacherCoursesRoutes = require("./routes/teacherCourse");
 const teacherCoursesTaskRoutes = require("./routes/teacherCourseTask");
 const courseModulesRoutes = require("./routes/courseModules");
 const userRoutes = require("./routes/user");
+const userCoursesRoutes = require('./routes/userCourse');
 
 const { port } = require("./config");
 const {
@@ -44,6 +45,7 @@ app.use("/teacher/courses", teacherCoursesRoutes);
 app.use("/teacher/courses/tasks", teacherCoursesTaskRoutes);
 app.use("/courses/modules", courseModulesRoutes);
 app.use("/user", userRoutes);
+app.use("/user/courses", userCoursesRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // static files

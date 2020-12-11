@@ -5,13 +5,13 @@ const {imageUpload, verifyAccess} = require('../middlewares')
 
 const {createOne, updateOne, removeOne} = require("../controllers/teacherCourse");
 
+// Codigo del profesor al cual se lea agregara el curso
+router.post("/:id",  verifyAccess, imageUpload, createOne);  
 
-router.post("/:id",  verifyAccess, imageUpload, createOne);  // registro de profesores
-
- /* router.get("/:id", verifyAccess, getOne) */
-
+// Codigo del profesor al cual se lea agregara el curso
 router.put("/:id", verifyAccess, imageUpload, updateOne)
 
+// Codigo del profesor al cual se lea agregara el curso 
 router.delete("/:id", verifyAccess, imageUpload, removeOne) 
 
 module.exports = router;

@@ -32,13 +32,13 @@ module.exports = {
       });
     }
   },
-
+  /* 
   updateOne: async (req, res) => {
     try {
-      const { idModule, title, duration, removeNames } = req.body;
-      let course = await courseModel.findById(req.params.id);
+      const { title, duration, removeNames } = req.body;
+      let course = await courseModel.findOne({"modules._id" : req.params.id});
       if (course) {
-        let i = course.modules.findIndex(c => c._id == idModule);
+        let i = course.modules.findIndex(c => c._id == req.params.id);
         if (i !== -1) {
           let moduleFound = course.modules[i];
           if (title) moduleFound.title = title;
@@ -54,10 +54,75 @@ module.exports = {
           msg: "Modificado correctamente",
           data: course
         });
-      } else
+      } else {
+        req.file_names && removeFile(req.file_names);
         return res
           .status(202)
-          .json({ status: false, msg: "No hay curso con este id" });
+          .json({ status: false, msg: "No hay modulo con este id" });
+      }
+        
+    } catch (err) {
+      return res.status(500).json({
+        status: false,
+        msg: "Ocurrio un error",
+        err: err.message
+      });
+    }
+  }, */
+
+  updateOne: async (req, res) => {
+    try {
+      const { title, duration } = req.body;
+      let updateQuery = {};
+      if (title) Object.assign(updateQuery, { "modules.$.title": title });
+      if (duration)
+        Object.assign(updateQuery, { "modules.$.duration": duration });
+      if (req.file_names) {
+        removeFile(moduleFound.files);
+        Object.assign(updateQuery, { "modules.$.files": req.file_names });
+      }
+      console.log(updateQuery)
+      courseModel.findOneAndUpdate(
+        { "modules._id": req.params.id },
+        updateQuery,
+        (err, post) => {
+          if (err)
+            return res.status(500).json({
+              status: false,
+              msg: "Ocurrio un error",
+              err: err.message
+            });
+          else
+            return res.status(200).json({
+              status: true,
+              msg: "Modificado correctamente",
+              data: post
+            });
+        }
+      );
+      /* if (course) {
+        let i = course.modules.findIndex(c => c._id == req.params.id);
+        if (i !== -1) {
+          let moduleFound = course.modules[i];
+          if (title) moduleFound.title = title;
+          if (duration) moduleFound.duration = duration;
+          if (req.file_names) {
+            removeFile(moduleFound.files);
+            moduleFound.files = req.file_names;
+          }
+          await course.save();
+        }
+        return res.status(200).json({
+          status: true,
+          msg: "Modificado correctamente",
+          data: course
+        });
+      } else {
+        req.file_names && removeFile(req.file_names);
+        return res
+          .status(202)
+          .json({ status: false, msg: "No hay modulo con este id" });
+      } */
     } catch (err) {
       return res.status(500).json({
         status: false,
@@ -69,25 +134,24 @@ module.exports = {
 
   removeOne: async (req, res) => {
     try {
-      const course = await courseModel.findById(req.params.id);
+      const course = await courseModel.findOne({
+        "modules._id": req.params.id
+      });
       if (course) {
-        const { idModule } = req.body;
-        let i = course.modules.findIndex(c => c._id == idModule);
+        let i = course.modules.findIndex(c => c._id == req.params.id);
         i !== -1 &&
           // elimina los archivos y luego elimina el modulo
           removeFile(course.modules[i].files) &&
           course.modules.splice(i, 1);
         await course.save();
-        return res
-          .status(200)
-          .json({
-            status: true,
-            msg: "Eliminado correctamente"
-          });
+        return res.status(200).json({
+          status: true,
+          msg: "Eliminado correctamente"
+        });
       } else
         return res
           .status(202)
-          .json({ status: false, msg: "No hay curso con este id" });
+          .json({ status: false, msg: "No hay modulo con este id" });
     } catch (err) {
       return res.status(500).json({
         status: false,

@@ -28,10 +28,10 @@ module.exports = {
 
   updateOne: async (req, res) => {
     try {
-      let teacher = await teacherModel.findById(req.params.id);
-      const {idCourse, course, startDate, endDate, numLessons} = req.body;
+      let teacher = await teacherModel.findOne({"courses._id": req.params.id});
+      const { course, startDate, endDate, numLessons} = req.body;
       if (teacher) {
-        let i = teacher.courses.findIndex(t => t._id == idCourse);
+        let i = teacher.courses.findIndex(t => t._id == req.params.id);
         if (i !== -1) {
           let courseFound = teacher.courses[i];
           if (course) courseFound.course = course;
@@ -48,7 +48,7 @@ module.exports = {
       } else {
         return res
           .status(202)
-          .json({ status: false, msg: "No se encontro profesor con este id" });
+          .json({ status: false, msg: "No se encontro un curso de profesor con este id" });
       }
     }catch (err){
       return res.status(500).json({
@@ -61,10 +61,9 @@ module.exports = {
 
   removeOne: async (req, res) => {
     try {
-      let teacher = await teacherModel.findById(req.params.id);
+      let teacher = await teacherModel.findOne({"courses._id": req.params.id});
       if (teacher) {
-        const { idCourse } = req.body;
-        let i = teacher.courses.findIndex(t => t._id == idCourse);
+        let i = teacher.courses.findIndex(t => t._id == req.params.id);
         i !== -1 && teacher.courses.splice(i, 1);
         await teacher.save();
         return res

@@ -5,8 +5,8 @@ const {fileUpload, verifyAccess} = require('../middlewares')
 
 const {createOne, /* updateOne */removeOne} = require("../controllers/teacherCourseTask");
 
-
-router.post("/:id",  verifyAccess, fileUpload, createOne);  // registro de profesores
+// id -> codigo del curso
+router.post("/:id",  verifyAccess, fileUpload, createOne); 
 
  /* router.get("/:id", verifyAccess, getOne) */
 

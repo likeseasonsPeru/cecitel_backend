@@ -13,6 +13,7 @@ module.exports = {
       }
     } catch (e) {
       console.log("hubo un problema al eliminar la imagen");
+      console.log(e);
     }
   },
   removeFile: async file => {
@@ -27,7 +28,7 @@ module.exports = {
       }
     } catch (e) {
       console.log("hubo un problema al eliminar la imagen");
-      console.log(e);
+      console.log(e.message);
     }
   }
 };
