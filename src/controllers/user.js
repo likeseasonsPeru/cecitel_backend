@@ -33,7 +33,7 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error",
+        msg: "Ocurrio un error",
         err: err.message
       });
     }

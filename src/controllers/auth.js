@@ -33,7 +33,7 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error. No se creo ningun usuario",
+        msg: "Ocurrio un error. No se creo ningun usuario",
         error: err.message
       });
     }

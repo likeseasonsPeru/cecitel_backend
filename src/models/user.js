@@ -14,27 +14,11 @@ const userSchema = new Schema(
     courses: [
       {
         course: { type: Schema.ObjectId, ref: "course" },
+        // courseName: {}  para guardar nombre del curso (adicionalemente)
         progress: {   // Solo para enlatados, indicara el numero de la progresion, debera tener el numero de videos 
           type: Number,
           default: null
         },
-        tasks: [
-          {
-            urls: [],
-            date: {
-              type: Date,
-              default: null
-            },
-            status: String
-          }
-        ],
-        assistance: { // Verificar flujo
-          type: Object,
-          default: null
-        },
-        startDate: String,
-        endDate: String,
-        teacher: { type: Schema.ObjectId, ref: "teacher" },
         score: {
           type: Number,
           default: null

@@ -38,6 +38,19 @@ const courseSchema = new Schema(
       type: String,
       default: null
     },
+    endDate: {  // solo para semiprecensiales y corpotarivos, webinars  ejm:  15 de Octubre
+      type: String,
+      default: null
+    },
+    numLessons: {
+      // Cantidad de lecciones
+      type: Number,
+      default: null
+    },
+    currentLesson: { // solo para semiprecensiales
+      type: Number,
+      default: 0
+    },
     schedule: {   // solo para semiprecensiales y corpotarivos, webinars  ejm:  07:00 pm, a 09:00 pm
       type: String,
       default: null
@@ -76,7 +89,27 @@ const courseSchema = new Schema(
       type: String,
       default: null
       // Gratuito, De pago, null
-    }
+    },
+    students: [
+      {
+        student: { type: Schema.ObjectId, ref: "user" },
+        score: {
+          type: Number,
+          default: null
+        },
+        assistance: [     // se deben crear tantas asistance como numLessos
+          {
+            order: Number,
+            present: {
+              type: Boolean,
+              default: false
+            }
+          }
+        ]
+      }
+    ]
+
+    
   },
   {
     versionKey: false,

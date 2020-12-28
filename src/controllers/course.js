@@ -25,7 +25,7 @@ module.exports = {
         limit,
         certificate,
         schedule,
-        startDate,
+        startDate
       } = req.body;
       const filename = req.file_names;
       duration = duration
@@ -70,7 +70,7 @@ module.exports = {
         .status(201)
         .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
-      req.file_names && removeImage(req.file_names)
+      req.file_names && removeImage(req.file_names);
       res
         .status(500)
         .json({ status: false, msg: "Ocurrio un error", err: err.message });
@@ -91,7 +91,7 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error",
+        msg: "Ocurrio un error",
         err: err.message
       });
     }
@@ -123,9 +123,7 @@ module.exports = {
         if (materials) course.materials = materials;
         if (objectives) course.objectives = objectives;
         if (duration)
-          course.duration = duration.hours 
-            ? duration 
-            : JSON.parse(duration);
+          course.duration = duration.hours ? duration : JSON.parse(duration);
         if (difficulty)
           course.difficulty = difficulty.level
             ? difficulty
@@ -146,17 +144,17 @@ module.exports = {
           data: course
         });
       } else {
-        filename && removeImage(filename)
+        filename && removeImage(filename);
         return res.status(202).json({
           status: false,
           msg: "No se encontro curso con este id"
         });
       }
     } catch (err) {
-      filename && removeImage(filename)
+      filename && removeImage(filename);
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error",
+        msg: "Ocurrio un error",
         err: err.message
       });
     }
@@ -167,12 +165,14 @@ module.exports = {
       if (err)
         return res.status(500).json({
           status: false,
-          msg: "No se elimino ningun curso",
+          msg: "Ocurrio un error",
           err: err.message
         });
       else {
         course && removeImage(course.image);
-        res.status(200).json({ status: true, msg: "Eliminado correctamente" });
+        return res
+          .status(200)
+          .json({ status: true, msg: "Eliminado correctamente" });
       }
     });
   },
@@ -190,7 +190,7 @@ module.exports = {
     } catch (err) {
       return res.status(500).json({
         status: false,
-        msg: "Hubo un error",
+        msg: "Ocurrio un error",
         err: err.message
       });
     }

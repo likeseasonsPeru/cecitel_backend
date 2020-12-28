@@ -9,69 +9,7 @@ const teacherSchema = new Schema(
     password: { type: String, required: true },
     position: { type: String, default: null },
     image: { type: String, default: null },
-    description: { type: String, default: null },
-    courses: [
-      {
-        /* courseid: String,
-        category: String,
-        name: String,
-        image: {
-          type: String,
-          default: null
-        },
-        time: String,   // horario si es que hubiera , 7:00 a 9:00  */
-        course: { type: Schema.ObjectId, ref: "course" },
-        tasks: [
-          {
-            title: { type: String, required: true },
-            date: { type: String, required: true },
-            total: Number, // equivalete al total de alumnos del curso
-            current: {
-              type: Number,
-              default: 0
-            },
-            files: [],
-          }
-        ],
-        startDate: {
-          type: String,
-          default: null
-        },
-        endDate: {
-          type: String,
-          default: null
-        },
-        numLessons: {
-          // Cantidad de lecciones
-          type: Number,
-          default: null
-        },
-        currentLesson: {
-          type: Number,
-          default: 0
-        },
-        lessons: [
-
-        ],
-        students: [
-          {
-            idStudent: { type: Schema.ObjectId, ref: "user" },
-            /* name: String,
-            dni: String,
-            score: Number,   */
-            assistance: [
-              {
-                order: Number,
-                present: {
-                  type: Boolean,
-                  default: false
-                }
-              }
-            ]
-          }
-        ]
-      }
-    ]
+    description: { type: String, default: null }
   },
   {
     versionKey: false,

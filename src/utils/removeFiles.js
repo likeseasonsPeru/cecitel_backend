@@ -12,7 +12,7 @@ module.exports = {
         await fs.unlink(path.resolve(__dirname, "../assets/imgs/", image));
       }
     } catch (e) {
-      console.log("hubo un problema al eliminar la imagen");
+      console.log("Ocurrio un problema al eliminar la imagen");
       console.log(e);
     }
   },
@@ -27,7 +27,7 @@ module.exports = {
         await fs.unlink(path.resolve(__dirname, "../assets/archivos/", file));
       }
     } catch (e) {
-      console.log("hubo un problema al eliminar la imagen");
+      console.log("Ocurrio un problema al eliminar la imagen");
       console.log(e.message);
     }
   }

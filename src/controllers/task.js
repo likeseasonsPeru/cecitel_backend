@@ -1,0 +1,49 @@
+const { taskModel } = require("../models");
+module.exports = {
+  getAll: async (req, res) => {
+    const tasks = await taskModel.find();
+    return res.status(200).json({ status: true, data: tasks });
+  },
+
+  createOne: async (req, res) => {
+    try {
+      let { course, teacher, date, students } = req.body;
+      const newTask = new taskModel({
+        course,
+        title,
+        teacher,
+        date,
+        students,
+        total: students.lenght
+      });
+      const task = await newTask.save();
+      return res.status(201).json({
+        status: true,
+        msg: "Agregado correctamente",
+        data: task
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: false,
+        msg: "Ocurrio un error",
+        err: err.message
+      });
+    }
+  },
+
+  removeOne: async (req, res) => {
+    taskModel.findByIdAndRemove(req.params.id, async (err, task) => {
+      if (err) {
+        return res.status(500).json({
+          status: false,
+          msg: "Ocurrio un error",
+          err: err.message
+        });
+      } else {
+        return res
+          .status(200)
+          .json({ status: true, msg: "Eliminado correctamente" });
+      }
+    });
+  }
+};
