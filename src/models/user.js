@@ -27,7 +27,7 @@ const userSchema = new Schema(
           type: Boolean,
           default: false
         },
-        certificate: {
+        certificate: {    // url
           type: String,
           default: null
         }
