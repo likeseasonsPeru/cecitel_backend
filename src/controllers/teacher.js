@@ -6,8 +6,8 @@ const { teacherModel, courseModel } = require("../models");
 
 module.exports = {
   getAll: async (req, res) => {
-    const courses = await teacherModel.find({}, { courses: 0 });
-    res.json({ status: true, data: courses });
+    const teachers = await teacherModel.find();
+    res.json({ status: true, data: teachers });
   },
 
   // Registro de profesores
@@ -44,9 +44,7 @@ module.exports = {
 
   getOne: async (req, res) => {
     try {
-      const teacher = await teacherModel
-        .findById(req.params.id)
-        .populate({ path: "courses.course", select: "-modules -teacher -_id" });
+      const teacher = await teacherModel.findById(req.params.id);
       if (teacher) return res.json({ status: true, data: teacher });
       else
         return res.status(202).json({
@@ -86,13 +84,11 @@ module.exports = {
               msg: "Ya existe un profesor con este email"
             });
           } else
-            return res
-              .status(200)
-              .json({
-                status: true,
-                msg: "Modificado correctamente",
-                data: postTeacher
-              });
+            return res.status(200).json({
+              status: true,
+              msg: "Modificado correctamente",
+              data: postTeacher
+            });
         });
       } else {
         return res.status(202).json({
