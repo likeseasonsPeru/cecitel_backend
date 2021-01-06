@@ -1,16 +1,14 @@
 const { userModel } = require("../models");
+
 module.exports = {
-  createOne: async (req, res) => {
+  createOne: async (req, res, next) => {
     try {
       let user = await userModel.findById(req.params.id);
       if (user) {
         user.courses.push(req.body);
         await user.save();
-        return res.status(201).json({
-          status: true,
-          msg: "Se agrego correctamente",
-          data: user
-        });
+        req.user = user;
+        next()
       } else
         return res
           .status(202)

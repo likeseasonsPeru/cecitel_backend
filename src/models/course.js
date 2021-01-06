@@ -69,7 +69,10 @@ const courseSchema = new Schema(
         lessons: [
           {
             title: String,
-            duration: String,
+            duration: {
+              type: Number,
+              default: null
+            },
             urlVideo: String,
           }
         ],

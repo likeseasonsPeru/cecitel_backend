@@ -5,9 +5,11 @@ const path = require("path");
 const cors = require("cors");
 const swaggerUI = require("swagger-ui-express");
 const courseRoutes = require("./routes/course");
+const courseModulesRoutes = require("./routes/courseModules");
+const courseModulesLessonsRoutes = require("./routes/courseModulsLesson");
+const courseStudent = require('./routes/courseStudent');
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
-const courseModulesRoutes = require("./routes/courseModules");
 const userRoutes = require("./routes/user");
 const userCoursesRoutes = require('./routes/userCourse');
 
@@ -38,8 +40,10 @@ app.use(cors(corsOptions));
 
 app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
-app.use("/teacher", teacherRoutes);
 app.use("/courses/modules", courseModulesRoutes);
+app.use("/courses/modules/lessons", courseModulesLessonsRoutes)
+app.use("/courses/students", courseStudent)
+app.use("/teacher", teacherRoutes);
 app.use("/user", userRoutes);
 app.use("/user/courses", userCoursesRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));

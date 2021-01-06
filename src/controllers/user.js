@@ -39,13 +39,12 @@ module.exports = {
     try {
       const user = await userModel.findById(req.params.id);
       if (user) {
-        const { name, email, dni, password, category } = req.body;
+        const { name, email, dni, category } = req.body;
         const filename = req.file_names;
 
         if (name) user.name = name;
         if (email) user.email = email;
         if (dni) user.dni = dni;
-        if (password) user.password = await encryptPassword(password);
         if (category) user.category = category;
         if (filename) {
           removeImage(user.image);

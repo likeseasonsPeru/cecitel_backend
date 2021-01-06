@@ -20,12 +20,14 @@ module.exports = {
         materials,
         objectives,
         duration,
+        startDate,
+        endDate,
+        numLessons,
         difficulty,
         price,
         limit,
         certificate,
         schedule,
-        startDate
       } = req.body;
       const filename = req.file_names;
       duration = duration
@@ -59,6 +61,8 @@ module.exports = {
         limit,
         schedule,
         startDate,
+        endDate,
+        numLessons,
         certificate:
           certificate == "Gratuito" || certificate == "De pago"
             ? certificate
@@ -70,6 +74,7 @@ module.exports = {
         .status(201)
         .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
+      console.log(err)
       req.file_names && removeImage(req.file_names);
       res
         .status(500)
@@ -81,7 +86,7 @@ module.exports = {
     try {
       const course = await courseModel
         .findById(req.params.id)
-        .populate({ path: "teacher", select: "-courses" });
+        .populate({ path: "teacher", select: "-courses" })
       if (course) return res.status(200).json({ status: true, course });
       else
         return res.status(202).json({
@@ -110,7 +115,9 @@ module.exports = {
       price,
       limit,
       schedule,
-      startDate
+      startDate,
+      endDate,
+      numLessons,
     } = req.body;
     const filename = req.file_names;
     try {
@@ -132,6 +139,8 @@ module.exports = {
         if (limit) course.limit = limit;
         if (schedule) course.schedule = schedule;
         if (startDate) course.startDate = startDate;
+        if (endDate) course.endDate = endDate;
+        if (numLessons) course.numLessons = numLessons;
         if (filename) {
           removeImage(course.image);
           course.image = filename[0];

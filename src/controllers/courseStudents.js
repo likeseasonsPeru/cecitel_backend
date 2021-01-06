@@ -1,28 +1,37 @@
 const { courseModel } = require("../models");
 const { removeFile } = require("../utils/index");
 module.exports = {
-  createOne: async (req, res) => {
+  createOneByIdUser: async (req, res) => {
     try {
-      const { title, duration } = req.body;
-      let course = await courseModel.findById(req.params.id);
+      const student = req.params.id;
+      let course = await courseModel.findById(req.body.course);
       if (course) {
-        //console.log("Los nombres de archivos son", req.file_names);
-        course.modules.push({
-          title,
-          duration,
-          files: req.file_names ? req.file_names : []
-        });
+        let assistance = [];
+
+        if (course.numLessons) {
+          for (let i = 0; i < course.numLessons; i++) {
+            assistance.push({
+              order: i + 1
+            });
+          }
+        }
+        let newStudent = {
+          student,
+          assistance
+        };
+
+        course.students.push(newStudent);
+
         await course.save();
-        return res
-          .status(201)
-          .json({ status: true, msg: "Agregado correctamente", data: course });
-      } else {
-        // Elimina los archibos si se subieron
-        req.file_names && removeFile(req.file_names);
+        return res.status(201).json({
+          status: true,
+          msg: "Agregado correctamente",
+          data: req.user
+        });
+      } else
         return res
           .status(202)
           .json({ status: false, msg: "No se encontro curso con este id" });
-      }
     } catch (err) {
       console.log(err);
       return res.status(500).json({
