@@ -4,13 +4,14 @@ const router = express.Router();
 const {imageUpload, verifyAccess} = require('../middlewares')
 
 const {createOne, updateOne, removeOne} = require('../controllers/userCourse');
-const {createOneByIdUser} = require("../controllers/courseStudents")
+const {createOneByIdUser, updateOneByIdUser} = require("../controllers/courseStudents")
 
 /* router.get("/", verifyAccess, getAll); */
 
 router.post("/:id", verifyAccess, createOne, createOneByIdUser);
 
-router.put("/:id", verifyAccess, updateOne) 
+// Update By course._id of user
+router.put("/:id", verifyAccess, updateOne, updateOneByIdUser) 
 
 router.delete("/:id", verifyAccess, removeOne) 
 

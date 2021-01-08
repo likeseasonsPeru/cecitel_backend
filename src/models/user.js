@@ -13,7 +13,7 @@ const userSchema = new Schema(
     purchases: [{}],
     courses: [
       {
-        course: { type: Schema.ObjectId, ref: "course" },
+        course: { type: Schema.ObjectId, ref: "course", unique: true },
         // courseName: {}  para guardar nombre del curso (adicionalemente)
         progress: {   // Solo para enlatados, indicara el numero de la progresion, debera tener el numero de videos 
           type: Number,

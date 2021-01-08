@@ -17,7 +17,7 @@ module.exports = {
         .findById(req.params.id)
         .populate({
           path: "courses.course",
-          select: "-modules -teacher -_id -createdAt -updatedAt"
+          select: "-modules -teacher -createdAt -updatedAt -students"
         });
       if (user) return res.json({ status: true, data: user });
       else {

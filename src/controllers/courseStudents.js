@@ -42,19 +42,15 @@ module.exports = {
     }
   },
 
-  updateOne: async (req, res) => {
+  updateOneByIdUser: async (req, res) => {
     try {
-      const { title, duration } = req.body;
+      const { /* student, */ score } = req.body;
       let updateQuery = {};
-      if (title) Object.assign(updateQuery, { "modules.$.title": title });
-      if (duration)
-        Object.assign(updateQuery, { "modules.$.duration": duration });
-      if (req.file_names) {
-        removeFile(moduleFound.files);
-        Object.assign(updateQuery, { "modules.$.files": req.file_names });
-      }
+      /* if (student) Object.assign(updateQuery, { "students.$.student": student }); */
+      if (score)
+        Object.assign(updateQuery, { "students.$.score": score });
       courseModel.findOneAndUpdate(
-        { "modules._id": req.params.id },
+        { "students.student": req.user._id },
         updateQuery,
         (err, post) => {
           if (err)
@@ -67,7 +63,7 @@ module.exports = {
             return res.status(200).json({
               status: true,
               msg: "Modificado correctamente",
-              data: post
+              data: req.user
             });
         }
       );
@@ -83,14 +79,14 @@ module.exports = {
   removeOne: async (req, res) => {
     try {
       const course = await courseModel.findOne({
-        "modules._id": req.params.id
+        "students.student": req.params.id
       });
       if (course) {
         let i = course.modules.findIndex(c => c._id == req.params.id);
         i !== -1 &&
           // elimina los archivos y luego elimina el modulo
           removeFile(course.modules[i].files) &&
-          course.modules.splice(i, 1);
+          course.students.splice(i, 1);
         await course.save();
         return res.status(200).json({
           status: true,
@@ -107,5 +103,26 @@ module.exports = {
         err: err.message
       });
     }
+  },
+
+  removeOne: async (req, res) => {
+    courseModel.findOneAndUpdate(
+      { "students.student": req.params.id },
+      { $pull: { students: { student: req.params.id } } },
+      (err, post) => {
+        if (err)
+          return res.status(500).json({
+            status: false,
+            msg: "Ocurrio un error",
+            err: err.message
+          });
+        else
+          return res.status(200).json({
+            status: true,
+            msg: "Eliminado correctamente"
+          });
+      }
+    );
   }
+
 };

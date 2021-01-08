@@ -3,7 +3,7 @@ const { removeImage } = require("../utils/index");
 
 module.exports = {
   getAll: async (req, res) => {
-    const courses = await courseModel.find({}, { modules: 0 });
+    const courses = await courseModel.find({}, { modules: 0, students: 0 });
     res.status(200).json({
       status: true,
       data: courses

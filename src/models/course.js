@@ -1,4 +1,5 @@
 const mongoose = require("mongoose");
+const uniqueValidator = require("mongoose-unique-validator");
 const { Schema } = mongoose;
 
 const courseSchema = new Schema(
@@ -95,7 +96,7 @@ const courseSchema = new Schema(
     },
     students: [
       {
-        student: { type: Schema.ObjectId, ref: "user" },
+        student: { type: Schema.ObjectId, ref: "user", unique: true },
         score: {
           type: Number,
           default: null
@@ -120,4 +121,5 @@ const courseSchema = new Schema(
   }
 );
 
+courseSchema.plugin(uniqueValidator);
 module.exports = mongoose.model("course", courseSchema);

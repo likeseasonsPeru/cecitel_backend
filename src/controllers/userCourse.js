@@ -8,7 +8,7 @@ module.exports = {
         user.courses.push(req.body);
         await user.save();
         req.user = user;
-        next()
+        next();
       } else
         return res
           .status(202)
@@ -22,7 +22,7 @@ module.exports = {
     }
   },
 
-  updateOne: async (req, res) => {
+  updateOne: async (req, res, next) => {
     try {
       const { course, progress, score, completed, certificate } = req.body;
       let updateQuery = {};
@@ -36,7 +36,7 @@ module.exports = {
         Object.assign(updateQuery, { "courses.$.certificate": certificate });
 
       userModel.findOneAndUpdate(
-        { "courses._id": req.params.id },
+        { "courses.course": req.params.id },
         updateQuery,
         (err, post) => {
           if (err)
@@ -45,11 +45,18 @@ module.exports = {
               msg: "Ocurrio un error",
               err: err.message
             });
-          else
-            return res.status(200).json({
-              status: true,
-              msg: "Modificado correctamente"
-            });
+          else {
+            if (post && score) {
+              console.log(post)
+              req.user = post;
+              next();
+            } else
+              return res.status(200).json({
+                status: true,
+                msg: "Modificado correctamente",
+                data: post
+              });
+          }
         }
       );
     } catch (err) {
@@ -63,8 +70,8 @@ module.exports = {
 
   removeOne: async (req, res) => {
     userModel.findOneAndUpdate(
-      { "courses._id": req.params.id },
-      { $pull: { courses: { _id: req.params.id } } },
+      { "courses.course": req.params.id },
+      { $pull: { courses: { course: req.params.id } } },
       (err, post) => {
         if (err)
           return res.status(500).json({
