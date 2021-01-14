@@ -69,9 +69,9 @@ module.exports = {
   },
 
   removeOne: async (req, res) => {
-    userModel.findOneAndUpdate(
-      { "courses.course": req.params.id },
-      { $pull: { courses: { course: req.params.id } } },
+    userModel.findByIdAndUpdate(
+      req.params.id ,
+      { $pull: { courses: { course: req.body.course } } },
       (err, post) => {
         if (err)
           return res.status(500).json({

@@ -8,7 +8,8 @@ const {
   getOne,
   updateOne,
   removeOne,
-  getByFilter
+  getByFilter, 
+  updateStudents
 } = require("../controllers/course");
 
 /**
@@ -40,6 +41,8 @@ router.post("/", verifyAccess, imageUpload, createOne);
 router.get("/:id", verifyAccess, getOne);
 
 router.put("/:id", verifyAccess, imageUpload, updateOne);
+
+router.put("/updateStudents/:id", verifyAccess, updateStudents);
 
 router.delete("/:id", verifyAccess, removeOne);
 

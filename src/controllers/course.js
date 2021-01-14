@@ -169,6 +169,27 @@ module.exports = {
     }
   },
 
+
+  updateStudents: (req, res) => {
+    courseModel.findByIdAndUpdate(
+      req.params.id,
+      { students: req.body },
+      (err, post) => {
+        if (err)
+          return res.status(500).json({
+            status: false,
+            msg: "Ocurrio un error",
+            err: err.message
+          });
+        else
+          return res.status(200).json({
+            status: true,
+            msg: "Modificado correctamente"
+          });
+      }
+    );
+  },
+
   removeOne: async (req, res) => {
     courseModel.findByIdAndRemove(req.params.id, async (err, course) => {
       if (err)

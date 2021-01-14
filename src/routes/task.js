@@ -3,8 +3,12 @@ const router = express.Router()
 
 const {fileUpload, verifyAccess} = require('../middlewares')
 
-const {createOne} = require('../controllers/task');
+const {getAll, getOne, createOne} = require('../controllers/task');
 
-router.post("/", verifyAccess, createOne)
+router.get("/", verifyAccess, getAll)
+
+router.get("/:id", verifyAccess, getOne)
+
+router.post("/", verifyAccess, fileUpload, createOne)
 
 module.exports = router;

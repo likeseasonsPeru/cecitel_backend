@@ -96,7 +96,7 @@ const courseSchema = new Schema(
     },
     students: [
       {
-        student: { type: Schema.ObjectId, ref: "user", unique: true },
+        student: { type: Schema.ObjectId, ref: "user" },
         score: {
           type: Number,
           default: null

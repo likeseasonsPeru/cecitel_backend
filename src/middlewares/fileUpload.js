@@ -1,6 +1,6 @@
 const multer = require("multer");
 const path = require("path");
-const {FILE_FORMATS} = require('../utils/constants')
+const { FILE_FORMATS } = require("../utils/constants");
 
 const storage = multer.diskStorage({
   destination: function(req, file, cb) {
@@ -12,8 +12,13 @@ const storage = multer.diskStorage({
   },
   filename: (req, file, cb) => {
     let file_name = new Date().getTime() + path.extname(file.originalname);
-    if (!req.file_names) req.file_names = [file_name] 
-    else req.file_names = [...req.file_names, ...[file_name]]
+    if (!req.file_names)
+      req.file_names = [{ name: file_name, originalname: file.originalname }];
+    else
+      req.file_names = [
+        ...req.file_names,
+        ...[{ name: file_name, originalname: file.originalname }]
+      ];
     cb(null, file_name);
   }
 });
@@ -26,10 +31,11 @@ const fileUpload = multer({
 module.exports = (req, res, next) => {
   fileUpload(req, res, err => {
     if (err) {
-      console.log(err)
-      return res.status(500).json({ status: false, msg: "Image error", err: err.message });
+      console.log(err);
+      return res
+        .status(500)
+        .json({ status: false, msg: "Image error", err: err.message });
     }
     next();
-    
   });
 };

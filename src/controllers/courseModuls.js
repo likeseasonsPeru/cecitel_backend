@@ -10,7 +10,7 @@ module.exports = {
         course.modules.push({
           title,
           duration,
-          files: req.file_names ? req.file_names : []
+          files: req.file_names ? req.file_names.map(f => f.name) : []
         });
         await course.save();
         return res
@@ -18,7 +18,7 @@ module.exports = {
           .json({ status: true, msg: "Agregado correctamente", data: course });
       } else {
         // Elimina los archibos si se subieron
-        req.file_names && removeFile(req.file_names);
+        req.file_names && removeFile(req.file_names.map(f => f.name));
         return res
           .status(202)
           .json({ status: false, msg: "No se encontro curso con este id" });
@@ -42,7 +42,9 @@ module.exports = {
         Object.assign(updateQuery, { "modules.$.duration": duration });
       if (req.file_names) {
         removeFile(moduleFound.files);
-        Object.assign(updateQuery, { "modules.$.files": req.file_names });
+        Object.assign(updateQuery, {
+          "modules.$.files": req.file_names.map(f => f.name)
+        });
       }
       courseModel.findOneAndUpdate(
         { "modules._id": req.params.id },

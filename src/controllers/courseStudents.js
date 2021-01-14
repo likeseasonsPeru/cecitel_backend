@@ -47,8 +47,7 @@ module.exports = {
       const { /* student, */ score } = req.body;
       let updateQuery = {};
       /* if (student) Object.assign(updateQuery, { "students.$.student": student }); */
-      if (score)
-        Object.assign(updateQuery, { "students.$.score": score });
+      if (score) Object.assign(updateQuery, { "students.$.score": score });
       courseModel.findOneAndUpdate(
         { "students.student": req.user._id },
         updateQuery,
@@ -77,38 +76,9 @@ module.exports = {
   },
 
   removeOne: async (req, res) => {
-    try {
-      const course = await courseModel.findOne({
-        "students.student": req.params.id
-      });
-      if (course) {
-        let i = course.modules.findIndex(c => c._id == req.params.id);
-        i !== -1 &&
-          // elimina los archivos y luego elimina el modulo
-          removeFile(course.modules[i].files) &&
-          course.students.splice(i, 1);
-        await course.save();
-        return res.status(200).json({
-          status: true,
-          msg: "Eliminado correctamente"
-        });
-      } else
-        return res
-          .status(202)
-          .json({ status: false, msg: "No hay modulo con este id" });
-    } catch (err) {
-      return res.status(500).json({
-        status: false,
-        msg: "Ocurrio un error",
-        err: err.message
-      });
-    }
-  },
-
-  removeOne: async (req, res) => {
-    courseModel.findOneAndUpdate(
-      { "students.student": req.params.id },
-      { $pull: { students: { student: req.params.id } } },
+    courseModel.findByIdAndUpdate(
+      req.params.id,
+      { $pull: { students: { student: req.body.student } } },
       (err, post) => {
         if (err)
           return res.status(500).json({
@@ -124,5 +94,4 @@ module.exports = {
       }
     );
   }
-
 };
