@@ -41,7 +41,6 @@ module.exports = {
       if (duration)
         Object.assign(updateQuery, { "modules.$.duration": duration });
       if (req.file_names) {
-        removeFile(moduleFound.files);
         Object.assign(updateQuery, {
           "modules.$.files": req.file_names.map(f => f.name)
         });
@@ -56,12 +55,19 @@ module.exports = {
               msg: "Ocurrio un error",
               err: err.message
             });
-          else
+          else {
+            // Se elimina los archivos anteriores
+            if (post && req.file_names) {
+              let i = post.modules.findIndex(c => c._id == req.params.id);
+              console.log(post.modules)
+              i !== -1 && removeFile(post.modules[i].files);
+            }
             return res.status(200).json({
               status: true,
               msg: "Modificado correctamente",
               data: post
             });
+          }
         }
       );
     } catch (err) {

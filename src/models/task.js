@@ -29,7 +29,7 @@ const taskSchema = new Schema(
           default: null
         },
         date: {
-          type: Date,
+          type: String,
           default: null
         },
         status: {

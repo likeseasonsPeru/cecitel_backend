@@ -1,6 +1,8 @@
 const { taskModel } = require("../models");
 const { courseModel } = require("../models");
-const crypto = require("crypto");
+const { removeFile } = require("../utils/index");
+
+const { getCurrentDate } = require("../utils");
 
 module.exports = {
   getAll: async (req, res) => {
@@ -36,7 +38,7 @@ module.exports = {
           const newTask = new taskModel({
             course,
             title,
-            url: filename ? filename[0] : null,
+            url: filename ? filename[0].name : null,
             teacher,
             date,
             students: courseFound.students,
@@ -63,9 +65,78 @@ module.exports = {
     }
   },
 
+  updateOne: async (req, res) => {
+    try {
+      const { title, date } = req.body;
+      let updateQuery = {};
+      title && Object.assign(updateQuery, { title });
+      date && Object.assign(updateQuery, { date });
+      req.file_names &&
+        Object.assign(updateQuery, { url: req.file_names[0].name });
+
+      taskModel.findByIdAndUpdate(req.params.id, updateQuery, (err, post) => {
+        if (err)
+          return res.status(500).json({
+            status: false,
+            msg: "Ocurrio un error",
+            err: err.message
+          });
+        else {
+          post && req.file_names && removeFile(post.url);
+          return res.status(200).json({
+            status: true,
+            msg: "Modificado correctamente",
+            data: post
+          });
+        }
+      });
+    } catch (err) {
+      return res.status(500).json({
+        status: false,
+        msg: "Ocurrio un error",
+        err: err.message
+      });
+    }
+  },
+
   updateStudentTask: async (req, res) => {
+    const { student } = req.body;
     const filename = req.file_names;
-    const task = await taskModel.findByIdAndUpdate(req.params.id, {url: filename ? filename[0] : null, });
+    
+    taskModel.findOneAndUpdate(
+      { _id: req.params.id },
+      {
+        "students.$[element].url": filename ? filename[0].name : null,
+        "students.$[element].filename": filename
+          ? filename[0].originalname
+          : null,
+        "students.$[element].date": filename ? getCurrentDate() : null,
+        "students.$[element].status": filename ? "Entregado" : "Pendiente"
+      },
+      {
+        arrayFilters: [{ "element.student": student }],
+        returnNewDocument: true
+      },
+      (err, post) => {
+        if (err)
+          return res.status(500).json({
+            status: false,
+            msg: "Ocurrio un error",
+            err: err.message
+          });
+        else {
+          if (filename && post && student) {
+            let i = post.students.findIndex(c => (c.student == student));
+            i !== -1 && removeFile(post.students[i].url);
+          }
+          return res.status(200).json({
+            status: true,
+            msg: "Modificado correctamente",
+            data: post
+          });
+        }
+      }
+    );
   },
 
   removeOne: async (req, res) => {
