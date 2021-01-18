@@ -7,12 +7,14 @@ const swaggerUI = require("swagger-ui-express");
 const courseRoutes = require("./routes/course");
 const courseModulesRoutes = require("./routes/courseModules");
 const courseModulesLessonsRoutes = require("./routes/courseModulsLesson");
-const courseStudent = require('./routes/courseStudent');
+const courseStudent = require("./routes/courseStudent");
 const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
 const userRoutes = require("./routes/user");
-const userCoursesRoutes = require('./routes/userCourse');
+const userCoursesRoutes = require("./routes/userCourse");
 const taskRoutes = require("./routes/task");
+const examRoutes = require("./routes/exam");
+const contactRoutes = require("./routes/contact");
 
 const { port } = require("./config");
 const {
@@ -42,12 +44,14 @@ app.use(cors(corsOptions));
 app.use("/", authRoutes);
 app.use("/courses", courseRoutes);
 app.use("/courses/modules", courseModulesRoutes);
-app.use("/courses/modules/lessons", courseModulesLessonsRoutes)
-app.use("/courses/students", courseStudent)
+app.use("/courses/modules/lessons", courseModulesLessonsRoutes);
+app.use("/courses/students", courseStudent);
 app.use("/teacher", teacherRoutes);
 app.use("/user", userRoutes);
 app.use("/user/courses", userCoursesRoutes);
-app.use("/task", taskRoutes)
+app.use("/task", taskRoutes);
+app.use("/exam", examRoutes);
+app.use("/contact", contactRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // static files

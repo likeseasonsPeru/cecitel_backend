@@ -1,12 +1,12 @@
 const mongoose = require("mongoose");
-const uniqueValidator = require("mongoose-unique-validator");
 const { Schema } = mongoose;
 
-const teacherSchema = new Schema(
+const contacSchema = new Schema(
   {
     names: { type: String, required: true },
     email: { type: String, required: true },
     phone: { type: String, required: true },
+    time: {type: String },
     message: { type: String, required: true }
   },
   {
@@ -15,5 +15,4 @@ const teacherSchema = new Schema(
   }
 );
 
-userSchema.plugin(uniqueValidator);
-module.exports = mongoose.model("teacher", teacherSchema);
+module.exports = mongoose.model("contact", contacSchema);
