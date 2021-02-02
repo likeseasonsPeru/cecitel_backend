@@ -54,6 +54,10 @@ app.use("/exam", examRoutes);
 app.use("/contact", contactRoutes);
 app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
+// test serverdeploy
+
+app.get("/test", (req, res) => res.send("Hello Word !"))
+
 // static files
 
 app.use(
