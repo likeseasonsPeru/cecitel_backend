@@ -1,0 +1,379 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "version": "1.0.0",
+        "title": "CECITEL BACKEND"
+    },
+    "servers": [
+        {
+            "url": "/",
+            "description": "Local"
+        },
+        {
+            "url": "/api/",
+            "description": "Production"
+        }
+    ],
+    "tags": [
+        {
+            "name": "Auth",
+            "description": "Rutas de autenticacion"
+        },
+        {
+            "name": "Cursos",
+            "description": "Rutas informacion de cursos"
+        },
+        {
+            "name": "Teacher",
+            "description": "Rutas para informacion de los profesores"
+        },
+        {
+            "name": "Usuario",
+            "description": "Rutas para informacion de los usuarios"
+        },
+        {
+            "name": "Examenes",
+            "description": "Rutas para informacion de los examenes de certificacion"
+        }
+    ],
+    "consumes": [
+        "application/json"
+    ],
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+
+        "/signin": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login de la aplicacion",
+                "requestBody": {
+                    "description": "Email y contraseña unicamente",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/login"
+                            }
+                        }
+                    }
+                },
+                "produces": [
+                    "application/json"
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Logeado correctamente, se obtiene token y _id del usuario"
+                    },
+                    "202": {
+                        "description": "Usuario no encontrado o password incorrecto"
+                    },
+                    "500": {
+                        "description": "Error, se obtiene mensaje con el error"
+                    }
+                }
+            }
+        },
+        "/signup": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Registro de la aplicacion",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/registro"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "201": {
+                        "description": "Usuario creado con exito"
+                    },
+                    "500": {
+                        "description": "Error, el email ya existe o se genero algun otro error al guardar"
+                    }
+                }
+            },
+            "put": {
+                "summary": "Update cat with given ID",
+                "tags": [
+                    "Auth"
+                ],
+                "requestBody": {
+                    "description": "Cat Object",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/Cat"
+                            }
+                        }
+                    }
+                },
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Cat with new values of properties",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/Cat"
+                        }
+                    },
+                    "400": {
+                        "description": "Failed. Bad post data."
+                    },
+                    "404": {
+                        "description": "Failed. Cat not found."
+                    }
+                }
+            },
+            "delete": {
+                "summary": "Delete cat with given ID",
+                "tags": [
+                    "Auth"
+                ],
+                "parameters": [
+                    {
+                        "in": "path",
+                        "name": "id",
+                        "required": true,
+                        "description": "Delete Cat with id",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/id"
+                        }
+                    },
+                    "404": {
+                        "description": "Failed. Cat not found."
+                    }
+                }
+            }
+        },
+        "signinTeacher": {
+            "post": {
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Login de la aplicacion para profesores",
+                "requestBody": {
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/definitions/login"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Logeado correctamente, se obtiene token y _id del profesor"
+                    },
+                    "202": {
+                        "description": "Profesor no registrado o password incorrecto"
+                    },
+                    "500": {
+                        "description": "Error, se obtiene mensaje con el error"
+                    }
+                }
+            }
+        },
+        "/courses": {
+            "get": {
+                "security": {
+                    "Bearer": []
+                },
+                "tags": [
+                    "Cursos"
+                ],
+                "summary": "Rutas para cursos",
+                "responses": {
+                    "200": {
+                        "description": "OK"
+                    }
+                }
+            }
+        }
+
+    },
+    "definitions": {
+        "login": {
+            "type": "object",
+            "properties": {
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                }
+            }
+        },
+        "registro": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "email": {
+                    "type": "string"
+                },
+                "password": {
+                    "type": "string"
+                },
+                "dni": {
+                    "type": "string"
+                }
+            }
+        },
+        "curso": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "image": {
+                    "type": "string"
+                },
+                "category": {
+                    "type": "string"
+                },
+                "review": {
+                    "type": "string"
+                },
+                "teacher": {
+                    "type": "string"
+                },
+                "materials": {
+                    "type": "string"
+                },
+                "objectives": {
+                    "type": "string"
+                },
+                "duration": {
+                    "type": "object",
+                    "properties": {
+                        "hours": {
+                            "type": "string"
+                        },
+                        "months": {
+                            "type": "string"
+                        },
+                        "timesxWeek": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "startDate": {
+                    "type": "string"
+                },
+                "endDate": {
+                    "type": "string"
+                },
+                "numLessons": {
+                    "type": "string"
+                },
+                "currentLesson": {
+                    "type": "string"
+                },
+                "schedule": {
+                    "type": "string"
+                },
+                "difficulty": {
+                    "type": "object",
+                    "properties": {
+                        "level": {
+                            "type": "string"
+                        },
+                        "description": {
+                            "type": "string"
+                        }
+                    }
+                },
+                "price": {
+                    "type": "integer"
+                },
+                "limit": {
+                    "type": "integer"
+                },
+                "certificate": {
+                    "type": "string"
+                }
+            }
+        },
+        "id": {
+            "properties": {
+                "uuid": {
+                    "type": "string"
+                }
+            }
+        },
+        "Cat": {
+            "type": "object",
+            "properties": {
+                "genus": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "isHungry": {
+                    "type": "boolean"
+                },
+                "lastFedDate": {
+                    "type": "string"
+                }
+            }
+        },
+        "Cats": {
+            "type": "object",
+            "properties": {
+                "cats": {
+                    "type": "object",
+                    "additionalProperties": {
+                        "$ref": "#/definitions/Cat"
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "scheme": "bearer",
+                "bearerFormat": ""
+            }
+        }
+    },
+    "securityDefinitions": {
+        "Bearer": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
+        }
+    }
+}

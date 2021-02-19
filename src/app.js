@@ -12,6 +12,7 @@ const authRoutes = require("./routes/auth");
 const teacherRoutes = require("./routes/teacher");
 const userRoutes = require("./routes/user");
 const userCoursesRoutes = require("./routes/userCourse");
+const userPurchasesRoutes = require("./routes/userPurchase");
 const taskRoutes = require("./routes/task");
 const examRoutes = require("./routes/exam");
 const contactRoutes = require("./routes/contact");
@@ -23,10 +24,8 @@ const {
   PUBLIC_TEMPLATEPATH
 } = require("./utils/constants");
 
-const swaggerDocs = require("./helpers/swagger");
+const swaggerDocs = require("./helpers/swaggerJson.json");
 const app = express();
-
-// settings
 
 // middlewares
 
@@ -49,6 +48,7 @@ app.use("/courses/students", courseStudent);
 app.use("/teacher", teacherRoutes);
 app.use("/user", userRoutes);
 app.use("/user/courses", userCoursesRoutes);
+app.use("/user/purchases", userPurchasesRoutes);
 app.use("/task", taskRoutes);
 app.use("/exam", examRoutes);
 app.use("/contact", contactRoutes);
@@ -56,7 +56,24 @@ app.use("/api-docs", swaggerUI.serve, swaggerUI.setup(swaggerDocs));
 
 // test serverdeploy
 
-app.get("/test", (req, res) => res.send("Hello Word !"))
+app.get("/test", (req, res) => res.send("Hello Word !"));
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  var err = new Error("Not Found");
+  err.status = 404;
+  next(err);
+});
+
+// restful api error handler
+app.use((err, req, res, next) => {
+  console.log(err);
+  return res.status(err.statusCode || 500).json({
+    status: false,
+    msg: "Ocurrio un error",
+    err: err.message
+  });
+});
 
 // static files
 

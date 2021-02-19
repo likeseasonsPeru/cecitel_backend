@@ -12,31 +12,14 @@ const {
   updateStudents
 } = require("../controllers/course");
 
-/**
- * @swagger
- * /courses:
- *   get:
- *     description: Get all books
- *     responses:
- *       200:
- *         description: Success
- *
- */
+
+
 
 router.get("/", verifyAccess, getAll);
 
 router.post("/", verifyAccess, imageUpload, createOne);
 
-/**
- * @swagger
- * /courses/:id:
- *   get:
- *     description: Get one books
- *     responses:
- *       200:
- *         description: Success
- *
- */
+
 
 router.get("/:id", verifyAccess, getOne);
 
