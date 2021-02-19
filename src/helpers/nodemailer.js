@@ -1,7 +1,14 @@
 const nodemailer = require("nodemailer");
-const {mailName, mailPassword, mailhost, mailport, mailuser} = require('../config');
+const hbs = require("nodemailer-express-handlebars");
+const {
+  mailName,
+  mailPassword,
+  mailhost,
+  mailport,
+  mailuser
+} = require("../config");
 
-const sendMail = email => {
+const sendMail = ({ email, name }, hash) => {
   let transporter = nodemailer.createTransport({
     name: mailName,
     host: mailhost,
@@ -28,26 +35,24 @@ const sendMail = email => {
 
   transporter.sendMail(
     {
-      from: '"Cecitel" <cecitel@gmail.com.pe>',
+      from: '"Cecitel" <admincecitel@soporte.com.pe>',
       to: email,
       subject: "Cecitel - Restablecimiento de contraseña",
       template: "forgot-password-email",
       context: {
-        /* url: `https://wasipetapp.com/api/reset_password/${token}`, */
-        /* codigo: codigo, */
-        /* name: user.name */
+        url: `https://cecitel.com/api/reset_password/${hash}`,
+        name: name
       }
     },
     async (err, info) => {
       if (err) {
         console.log(err);
-        return false;
       } else {
         console.log(info);
-        return true;
       }
     }
   );
+
 };
 
 module.exports = sendMail;
