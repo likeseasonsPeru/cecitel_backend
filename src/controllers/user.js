@@ -13,12 +13,10 @@ module.exports = {
 
   getOne: async (req, res) => {
     try {
-      const user = await userModel
-        .findById(req.params.id)
-        .populate({
-          path: "courses.course",
-          select: "-modules -teacher -createdAt -updatedAt -students"
-        });
+      const user = await userModel.findById(req.params.id).populate({
+        path: "courses.course",
+        select: "-modules -teacher -createdAt -updatedAt -students"
+      });
       if (user) return res.json({ status: true, data: user });
       else {
         return res.status(202).json({
@@ -76,5 +74,32 @@ module.exports = {
     }
   },
 
-  resetPassword: async (req, res) => {}
+  setFavoriteByUserId: async (req, res) => {
+    try {
+      const user = await userModel.findById(req.params.id);
+      if (user) {
+        const { course, remove } = req.body;
+        if (remove) {
+          let i = user.favorites.indexOf(course);
+          i !== -1 && user.favorites.splice(i, 1);
+        } else course && user.favorites.push(course);
+        await user.save();
+        return res.status(200).json({
+          status: true,
+          msg: "Modificado correctamente",
+          data: user.favorites
+        });
+      } else
+        return res.status(202).json({
+          status: false,
+          msg: "No se encontro usuario con este id"
+        });
+    } catch (err) {
+      return res.status(500).json({
+        status: false,
+        msg: "Ocurrio un error",
+        err: err.message
+      });
+    }
+  }
 };
