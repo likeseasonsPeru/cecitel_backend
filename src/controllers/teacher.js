@@ -27,7 +27,7 @@ module.exports = {
       });
       newTeacher.save((err, postTeacher) => {
         if (err)
-          return res.status(202).json({
+          return res.status(422).json({
             status: false,
             msg: "Ya existe un profesor con este email"
           });
@@ -47,7 +47,7 @@ module.exports = {
       const teacher = await teacherModel.findById(req.params.id);
       if (teacher) return res.json({ status: true, data: teacher });
       else
-        return res.status(202).json({
+        return res.status(422).json({
           status: false,
           msg: "No se encontro profesor con este id"
         });
@@ -79,7 +79,7 @@ module.exports = {
 
         teacher.save((err, postTeacher) => {
           if (err) {
-            return res.status(202).json({
+            return res.status(422).json({
               status: false,
               msg: "Ya existe un profesor con este email"
             });
@@ -91,7 +91,7 @@ module.exports = {
             });
         });
       } else {
-        return res.status(202).json({
+        return res.status(422).json({
           status: false,
           msg: "No se encontro profesor con este id"
         });
@@ -108,14 +108,14 @@ module.exports = {
   removeOne: async (req, res) => {
     teacherModel.findByIdAndRemove(req.params.id, async (err, teacher) => {
       if (err) {
-        res.status(500).json({
+        return res.status(500).json({
           status: false,
           msg: "No se elimino ningun profesor",
           err: err.message
         });
       } else {
         teacher && removeImage(teacher.image);
-        res.status(200).json({ status: true, msg: "Eliminado correctamente" });
+        return res.status(200).json({ status: true, msg: "Eliminado correctamente" });
       }
     });
   }

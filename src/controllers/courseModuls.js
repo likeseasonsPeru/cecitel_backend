@@ -20,7 +20,7 @@ module.exports = {
         // Elimina los archibos si se subieron
         req.file_names && removeFile(req.file_names.map(f => f.name));
         return res
-          .status(202)
+          .status(422)
           .json({ status: false, msg: "No se encontro curso con este id" });
       }
     } catch (err) {
@@ -97,7 +97,7 @@ module.exports = {
         });
       } else
         return res
-          .status(202)
+          .status(422)
           .json({ status: false, msg: "No hay modulo con este id" });
     } catch (err) {
       return res.status(500).json({

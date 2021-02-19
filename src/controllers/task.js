@@ -15,7 +15,7 @@ module.exports = {
       const task = await taskModel.findById(req.params.id);
       if (task) return res.status(200).json({ status: true, data: task });
       else
-        return res.status(202).json({
+        return res.status(422).json({
           status: false,
           msg: "No se encontro tarea con este id"
         });
@@ -52,7 +52,7 @@ module.exports = {
           });
         }
       }
-      return res.status(200).json({
+      return res.status(422).json({
         status: false,
         msg: "Faltan datos para la creacion"
       });

@@ -70,13 +70,13 @@ module.exports = {
         image: filename ? filename[0] : null
       });
       const course = await newCourse.save();
-      res
+      return res
         .status(201)
         .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
       console.log(err)
       req.file_names && removeImage(req.file_names);
-      res
+      return res
         .status(500)
         .json({ status: false, msg: "Ocurrio un error", err: err.message });
     }
@@ -89,7 +89,7 @@ module.exports = {
         .populate({ path: "teacher", select: "-courses" })
       if (course) return res.status(200).json({ status: true, course });
       else
-        return res.status(202).json({
+        return res.status(422).json({
           status: false,
           msg: "No se encontro curso con este id"
         });
@@ -154,7 +154,7 @@ module.exports = {
         });
       } else {
         filename && removeImage(filename);
-        return res.status(202).json({
+        return res.status(422).json({
           status: false,
           msg: "No se encontro curso con este id"
         });

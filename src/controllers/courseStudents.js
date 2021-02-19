@@ -30,7 +30,7 @@ module.exports = {
         });
       } else
         return res
-          .status(202)
+          .status(422)
           .json({ status: false, msg: "No se encontro curso con este id" });
     } catch (err) {
       console.log(err);
