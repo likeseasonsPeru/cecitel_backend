@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 
-const {imageUpload, verifyAccess} = require('../middlewares')
+const {fileUpload, verifyAccess} = require('../middlewares')
 
 const {createOne, updateOne, removeOne} = require('../controllers/userCourse');
 const {createOneByIdUser, updateOneByIdUser} = require("../controllers/courseStudents")
@@ -11,7 +11,7 @@ const {createOneByIdUser, updateOneByIdUser} = require("../controllers/courseStu
 router.post("/:id", verifyAccess, createOne, createOneByIdUser);
 
 // Update By course._id of user
-router.put("/:id", verifyAccess, updateOne, updateOneByIdUser) 
+router.put("/:id", verifyAccess, fileUpload, updateOne, updateOneByIdUser) 
 
 router.delete("/:id", verifyAccess, removeOne) 
 

@@ -10,12 +10,20 @@ const userSchema = new Schema(
     password: { type: String, required: true },
     category: { type: String, default: "user" },
     image: { type: String, default: null },
-    purchases: [{}],
+    purchases: [
+      {
+        courses: [{ type: Schema.ObjectId, ref: "course" }],
+        total: Number,
+        image: { type: String, default: null },
+        approved: { type: Boolean, default: false }
+      }
+    ],
     courses: [
       {
         course: { type: Schema.ObjectId, ref: "course" },
         // courseName: {}  para guardar nombre del curso (adicionalemente)
-        progress: {   // Solo para enlatados, indicara el numero de la progresion, debera tener el numero de videos 
+        progress: {
+          // Solo para enlatados, indicara el numero de la progresion, debera tener el numero de videos
           type: Number,
           default: null
         },
@@ -27,7 +35,8 @@ const userSchema = new Schema(
           type: Boolean,
           default: false
         },
-        certificate: {    // url
+        certificate: {
+          // url
           type: String,
           default: null
         }

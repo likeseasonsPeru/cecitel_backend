@@ -1,5 +1,5 @@
 const { userModel } = require("../models");
-
+const { removeFile } = require("../utils");
 module.exports = {
   createOne: async (req, res, next) => {
     try {
@@ -32,11 +32,15 @@ module.exports = {
       if (score) Object.assign(updateQuery, { "courses.$.score": score });
       if (completed !== null)
         Object.assign(updateQuery, { "courses.$.completed": completed });
-      if (certificate)
-        Object.assign(updateQuery, { "courses.$.certificate": certificate });
+
+      if (req.file_names) {
+        Object.assign(updateQuery, {
+          "courses.$.certificate": req.file_names[0].name
+        });
+      }
 
       userModel.findOneAndUpdate(
-        { "courses.course": req.params.id },
+        { "courses._id": req.params.id },
         updateQuery,
         (err, post) => {
           if (err)
@@ -47,8 +51,12 @@ module.exports = {
             });
           else {
             if (post && score) {
-              console.log(post)
               req.user = post;
+              // remove olf file
+              if (req.file_names) {
+                let i = post.courses.findIndex(c => c._id == req.params.id);
+                i !== -1 && removeFile(post.courses[i].certificate);
+              }
               next();
             } else
               return res.status(200).json({
@@ -70,7 +78,7 @@ module.exports = {
 
   removeOne: async (req, res) => {
     userModel.findByIdAndUpdate(
-      req.params.id ,
+      req.params.id,
       { $pull: { courses: { course: req.body.course } } },
       (err, post) => {
         if (err)
