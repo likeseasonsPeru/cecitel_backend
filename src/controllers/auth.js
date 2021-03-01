@@ -114,9 +114,10 @@ module.exports = {
       const hasHash = await hashModel.findOne({ userId: user._id });
       hasHash && (await hasHash.remove());
       const hash = new hashModel({ userId: user._id });
-      sendMail(user, hash);
-      // sendMail
 
+      // sendMail
+      const objeto = {...user._doc, ...{hash: hash._id}}
+      sendMail(objeto, "forgot-password-email");
       await hash.save();
       return res.status(200).json({ status: true, msg: "Correo enviado" });
     } catch (err) {

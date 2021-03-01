@@ -1,5 +1,6 @@
 const { userModel } = require("../models");
 const { removeImage } = require("../utils");
+const { sendMail } = require("../helpers");
 
 module.exports = {
   getAllPurchases: async (req, res) => {
@@ -19,10 +20,22 @@ module.exports = {
 
   createOne: async (req, res) => {
     try {
-      let user = await userModel.findById(req.params.id);
+      let user = await userModel
+        .findById(req.params.id)
+        .populate({ path: "purchases.courses" });
       if (user) {
         user.purchases.push(req.body);
         await user.save();
+
+        const { courses } = req.body;
+        if (courses) {
+          
+        }
+        // mandar un email de compra
+        // sendMail
+        const objeto = { ...user._doc };
+        sendMail(objeto, "forgot-password-email");
+
         return res.status(201).json({
           status: true,
           msg: "Agregado correctamente",
