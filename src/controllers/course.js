@@ -27,7 +27,7 @@ module.exports = {
         price,
         limit,
         certificate,
-        schedule,
+        schedule
       } = req.body;
       const filename = req.file_names;
       duration = duration
@@ -74,7 +74,7 @@ module.exports = {
         .status(201)
         .json({ status: true, msg: "Agregado correctamente", data: course });
     } catch (err) {
-      console.log(err)
+      console.log(err);
       req.file_names && removeImage(req.file_names);
       return res
         .status(500)
@@ -86,7 +86,7 @@ module.exports = {
     try {
       const course = await courseModel
         .findById(req.params.id)
-        .populate({ path: "teacher", select: "-courses" })
+        .populate({ path: "teacher", select: "-courses" });
       if (course) return res.status(200).json({ status: true, course });
       else
         return res.status(422).json({
@@ -117,7 +117,7 @@ module.exports = {
       schedule,
       startDate,
       endDate,
-      numLessons,
+      numLessons
     } = req.body;
     const filename = req.file_names;
     try {
@@ -168,7 +168,6 @@ module.exports = {
       });
     }
   },
-
 
   updateStudents: (req, res) => {
     courseModel.findByIdAndUpdate(
