@@ -1,6 +1,8 @@
-const { userModel } = require("../models");
+const { userModel, courseModel } = require("../models");
 const { removeImage } = require("../utils");
 const { sendMail } = require("../helpers");
+
+const { createManyByUserId } = require("../controllers/userCourse");
 
 module.exports = {
   getAllPurchases: async (req, res) => {
@@ -20,17 +22,35 @@ module.exports = {
 
   createOne: async (req, res) => {
     try {
-      let user = await userModel
-        .findById(req.params.id)
-        .populate({ path: "purchases.courses" });
+      let user = await userModel.findById(req.params.id);
       if (user) {
-        user.purchases.push(req.body);
-        await user.save();
+        const { courses, payment_type } = req.body;
+        let approved = false;
 
-        const { courses } = req.body;
         if (courses) {
-          
+          // separar cupos de los semiprecenciales
+
+          const coursesFound = await courseModel.find({
+            _id: { $in: courses },
+            category: { $in: ["Semiprecencial", "Webinar"] }
+          });
+          coursesFound.forEach(async course => {
+            if (course.limit) {
+              course.limit--;
+              await course.save();
+            }
+          });
+
+          // Activar curso si es Pago con tarjeta
+          /******************************************** */
+          if (payment_type == "Tarjeta") {
+            createManyByUserId(courses, user);
+            approved = true;
+          }
+          /******************************************** */
         }
+        user.purchases.push({ ...req.body, approved });
+        await user.save();
         // mandar un email de compra
         // sendMail
         const objeto = { ...user._doc };
@@ -123,5 +143,11 @@ module.exports = {
         }
       }
     );
+  },
+
+  confirmbyIdPurchase: async (req, res) => {
+    try {
+      const user = await userModel.findOne({ "purchases._id": req.params.id });
+    } catch (err) {}
   }
 };

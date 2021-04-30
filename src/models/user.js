@@ -13,9 +13,12 @@ const userSchema = new Schema(
     purchases: [
       {
         courses: [{ type: Schema.ObjectId, ref: "course" }],
+        payment_type: {type: String, default: "Tarjeta"}, // Tarjeta o Transferencia
         total: Number,
         image: { type: String, default: null },
-        approved: { type: Boolean, default: false }
+        approved: { type: Boolean, default: false },
+        cancelled: { type: Boolean, default: false },
+        createdAt: { type: Date, default: Date.now }
       }
     ],
     courses: [

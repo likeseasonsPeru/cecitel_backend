@@ -1,5 +1,7 @@
 const { userModel } = require("../models");
 const { removeFile } = require("../utils");
+const { createOneByCourseId } = require("../controllers/courseStudents");
+
 module.exports = {
   createOne: async (req, res, next) => {
     try {
@@ -94,5 +96,22 @@ module.exports = {
           });
       }
     );
+  },
+
+  //**************  Controller for another controllers   **************** */
+
+  createManyByUserId: async (courses, user) => {
+    try {
+      if (user) {
+        for (let course of courses) {
+          user.courses.push(course);
+          // create the user in the course
+          createOneByCourseId(user._id, course);
+        }
+        await user.save();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 };

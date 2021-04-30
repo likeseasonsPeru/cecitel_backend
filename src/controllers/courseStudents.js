@@ -93,5 +93,31 @@ module.exports = {
           });
       }
     );
+  },
+
+  //**************  Controller for another controllers   **************** */
+
+  createOneByCourseId: async (userId, course) => {
+    try {
+      /* const course = await courseModel.findById(courseId); */
+      if (course) {
+        let assistance = [];
+        if (course.numLessons && course.category == 'Semiprecencial') {
+          for (let i = 0; i < course.numLessons; i++) {
+            assistance.push({
+              order: i + 1
+            });
+          }
+        }
+        let newStudent = {
+          student: userId,
+          assistance
+        };
+        course.students.push(newStudent);
+        await course.save();
+      }
+    } catch (err) {
+      console.log(err);
+    }
   }
 };

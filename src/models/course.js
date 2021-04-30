@@ -12,8 +12,9 @@ const courseSchema = new Schema(
       type: String,
       default: null
     },
-    category: {
+    category: { // semiprecencial, enlatado, webinar
       type: String,
+      enum: ["semiprecencial", "enlatado", "webinar"],
       required: true
     },
     review: String,
