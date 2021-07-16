@@ -13,15 +13,11 @@ const {
 } = require("../controllers/course");
 
 
-
-
-router.get("/", verifyAccess, getAll);
+router.get("/", getAll);
 
 router.post("/", verifyAccess, imageUpload, createOne);
 
-
-
-router.get("/:id", verifyAccess, getOne);
+router.get("/:id", getOne);
 
 router.put("/:id", verifyAccess, imageUpload, updateOne);
 
@@ -29,6 +25,6 @@ router.put("/updateStudents/:id", verifyAccess, updateStudents);
 
 router.delete("/:id", verifyAccess, removeOne);
 
-router.post("/getByFiler", verifyAccess, getByFilter);
+router.post("/getByFilter", verifyAccess, getByFilter);
 
 module.exports = router;

@@ -13,18 +13,14 @@ module.exports = {
         name,
         email,
         dni,
-        password: encryptedPassword
+        password: encryptedPassword,
       });
-      /*  await newUser.save();
-      const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
-      res.status(201).json({ status: true, token, id: newUser }); */
       newUser.save((err, postUser) => {
         if (err)
           return res.status(500).json({
             status: false,
-            msg:
-              "No se creo ningun usuario, el email ya existe o falta algun campo",
-            err: err.message
+            msg: "No se creo ningun usuario, el email ya existe o falta algun campo",
+            err: err.message,
           });
         else {
           const token = jwt.sign(JSON.stringify(newUser), jwtSecret);
@@ -35,7 +31,7 @@ module.exports = {
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
-        error: err.message
+        error: err.message,
       });
     }
   },
@@ -65,7 +61,7 @@ module.exports = {
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
-        error: err.message
+        error: err.message,
       });
     }
   },
@@ -97,7 +93,7 @@ module.exports = {
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
-        error: err.message
+        error: err.message,
       });
     }
   },
@@ -116,7 +112,7 @@ module.exports = {
       const hash = new hashModel({ userId: user._id });
 
       // sendMail
-      const objeto = {...user._doc, ...{hash: hash._id}}
+      const objeto = { ...user._doc, ...{ hash: hash._id } };
       sendMail(objeto, "forgot-password-email");
       await hash.save();
       return res.status(200).json({ status: true, msg: "Correo enviado" });
@@ -124,7 +120,7 @@ module.exports = {
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
-        error: err.message
+        error: err.message,
       });
     }
   },
@@ -136,13 +132,13 @@ module.exports = {
       if (!hasHash)
         return res.status(422).json({
           status: false,
-          msg: "No se puede resetear el password con este hash"
+          msg: "No se puede resetear el password con este hash",
         });
       const user = await userModel.findById(hasHash.userId);
       if (!user)
         return res.status(422).json({
           status: false,
-          msg: "No se puede resetear el password con este hash"
+          msg: "No se puede resetear el password con este hash",
         });
       const encryptedPassword = await encryptPassword(password);
       user.password = encryptedPassword;
@@ -150,14 +146,14 @@ module.exports = {
       await hasHash.remove();
       return res.status(200).json({
         status: true,
-        msg: "Modificado correctamente"
+        msg: "Modificado correctamente",
       });
     } catch (err) {
       return res.status(500).json({
         status: false,
         msg: "Ocurrio un error",
-        error: err.message
+        error: err.message,
       });
     }
-  }
+  },
 };
