@@ -1,16 +1,16 @@
 const bcrypt = require("bcrypt");
 const { saltRouds } = require("../config");
 
-const getSalt = async () => {
+async function getSalt () {
   return await bcrypt.genSaltSync(+saltRouds);
 };
 
-const encryptPassword = async (password) => {
+async function encryptPassword (password) {
   const salt = await getSalt();
   return await bcrypt.hashSync(password, salt);
 };
 
-const comparePassword = async (passwordFromClient, encryptedPassword) => {
+async function comparePassword (passwordFromClient, encryptedPassword) {
   return await bcrypt.compareSync(passwordFromClient, encryptedPassword);
 };
 

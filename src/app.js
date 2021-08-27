@@ -68,7 +68,7 @@ app.use((req, res, next) => {
 // restful api error handler
 app.use((err, req, res, next) => {
   console.log(err);
-  return res.status(err.statusCode || 500).json({
+    return res.status(err.statusCode || 500).json({
     status: false,
     msg: "Ocurrio un error",
     err: err.message

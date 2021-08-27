@@ -14,7 +14,7 @@ const courseSchema = new Schema(
     },
     category: { // semiprecencial, enlatado, webinar
       type: String,
-      enum: ["semiprecencial", "enlatado", "webinar"],
+      enum: ["Semiprecencial", "Online", "Coaching"],
       required: true
     },
     review: String,
@@ -93,7 +93,7 @@ const courseSchema = new Schema(
     certificate:{     // viene con certificado 
       type: String,
       default: null
-      // Gratuito, De pago, null
+      // Gratuito, De pago, null, examen
     },
     students: [
       {
